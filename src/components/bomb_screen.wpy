@@ -106,7 +106,7 @@
     margin-top: 50rpx;
   }
   .alert_mask {
-    background-color: rgba(0, 0, 0, .6);
+    background-color: rgba(0, 0, 0, .618);
     position: fixed;
     z-index: 2000;
     bottom: 0;
