@@ -16,55 +16,53 @@
     <view class="button type_green">发表评论</view>
   </view>
 </template>
-<script>
-import wepy from 'wepy';
-import Rate from "../components/rate"
-export default class goodsComment extends wepy.page {
-  config = {
-    navigationBarTitleText: '商品评论',
-  }
-  data = {
-    
-  }
-  onLoad() {
 
+<script>
+  import wepy from 'wepy';
+  import Rate from "../components/rate"
+  export default class goodsComment extends wepy.page {
+    config = {
+      navigationBarTitleText: '商品评论',
+    }
+    data = {
+    }
+    onLoad() {
+    }
+    components = {
+      rate: Rate
+    }
+    computed = {}
+    methods = {
+      bindText(e) {
+        console.log(e.detail.value)
+      },
+      callbackStart(count) {
+        console.log(count)
+      }
+    }
+    events = {}
   }
-  components = {
-    rate: Rate
-  }
-  computed = {}
-  methods = {
-    bindText(e) {
-      console.log(e.detail.value)
-    },
-    callbackStart(count){
-      console.log(count)
+</script>
+
+<style lang="less">
+  .block {
+    background: #fff;
+    padding: 20rpx;
+    .item-block {
+      display: flex;
+      margin-top: 20rpx;
+    }
+    .title {
+      padding-right: 10rpx;
+    }
+    .textarea {
+      height: 200rpx;
+      border-radius: 10rpx;
+      border: 1rpx solid #efefef;
+      padding: 10rpx;
+    }
+    .type_green {
+      margin-top: 100rpx;
     }
   }
-  events = {}
-}
-
-</script>
-<style lang="less">
-.block {
-  background: #fff;
-  padding: 20rpx;
-  .item-block {
-    display: flex;
-    margin-top: 20rpx;
-  }
-  .title {
-    padding-right: 10rpx;
-  }
-  .textarea {
-    height: 200rpx;
-    border-radius: 10rpx;
-    border: 1rpx solid #efefef;
-    padding: 10rpx;
-  }
-  .type_green{
-    margin-top: 100rpx;
-  }
-}
-
 </style>

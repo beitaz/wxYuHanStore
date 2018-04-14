@@ -1,18 +1,20 @@
 <template>
   <view wx:if="{{show}}">
     <view class="filter-slider">
-      <!--<view class="block">
-                      <view class="title">品类</view>
-                      <view class="item_box">
-                        <view class="item active">女款休闲裤(12)<i class="iconfont icon-bottom-check"></i></view>
-                        <view class="item">女款休闲裤(12)</view>
-                        <view class="item">女款休闲裤(12)</view>
-                        <view class="item">女款休闲裤(12)</view>
-                        <view class="item">女款休闲裤(12)</view>
-                        <view class="item">女款休闲裤(12)</view>
-                        <view class="item">女款休闲裤(12)</view>
-                      </view>
-                    </view>-->
+      <!--
+      <view class="block">
+        <view class="title">品类</view>
+        <view class="item_box">
+          <view class="item active">女款休闲裤(12)<i class="iconfont icon-bottom-check"></i></view>
+          <view class="item">女款休闲裤(12)</view>
+          <view class="item">女款休闲裤(12)</view>
+          <view class="item">女款休闲裤(12)</view>
+          <view class="item">女款休闲裤(12)</view>
+          <view class="item">女款休闲裤(12)</view>
+          <view class="item">女款休闲裤(12)</view>
+        </view>
+      </view>
+      -->
       <view class="block">
         <view class="title">尺码</view>
         <view class="item_box">
@@ -50,12 +52,12 @@
       close() {
         this.show = false;
       },
-      SearchFilter(){
+      SearchFilter() {
         this.swictchOverlay();
       },
       selSKU(e) {
         var sku = e.currentTarget.dataset.sku;
-        console.log("sku---"+sku);
+        console.log("sku---" + sku);
         this.$emit('filterSku', sku);
         this.swictchOverlay();
       }

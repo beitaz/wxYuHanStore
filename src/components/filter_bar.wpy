@@ -61,8 +61,7 @@
         that.arrowType = "";
       }
     }
-
-    setSkuVal (sku) {
+    setSkuVal(sku) {
       /*this.type = "sku";
       this.currentType = sku;*/
       this.$emit("currentType", {
@@ -70,7 +69,6 @@
         type: sku
       });
     }
-
     watch = {
       currentType(newValue) {
         this.$emit("currentType", {
@@ -89,7 +87,7 @@
     }
     events = {
       filterSku(sku) {
-        console.log("filterBar.sku...."+sku);
+        console.log("filterBar.sku...." + sku);
         this.setSkuVal(sku);
         /*this.$emit("currentType", {
           name: "sku",

@@ -9,7 +9,6 @@
       <bottomLoadMore :show.sync="showLoading" message="正在加载"></bottomLoadMore>
       <!--暂无数据显示-->
       <placeholder :show.sync="is_empty" message="暂无发现数据"></placeholder>
-
     </view>
     <view class="history {{show?'':'hidden'}}" wx:else>
       <view class="doc">历史记录</view>
@@ -56,7 +55,7 @@
       showLoading: false,
       purchasetype: 1,
       is_empty: false,
-      is_filter:false,
+      is_filter: false,
       //当前页面
       currentPage: 1,
       //总页数

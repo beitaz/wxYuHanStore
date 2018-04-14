@@ -5,10 +5,12 @@ export default class Tips {
   constructor() {
     this.isLoading = false;
   }
-  /**
-   * 弹出提示框
-   */
 
+  /**
+   * 提示框
+   * @param {String} title 标题
+   * @param {Number} duration 停留时间,默认 500 毫秒
+   */
   static success(title, duration = 500) {
     setTimeout(() => {
       wx.showToast({
@@ -28,7 +30,10 @@ export default class Tips {
   }
 
   /**
-   * 弹出确认窗口
+   * 确认窗口
+   * @param {String} text 确认文本
+   * @param {JSON} payload 有效载荷
+   * @param {String} title 标题
    */
   static confirm(text, payload = {}, title = "提示") {
     return new Promise((resolve, reject) => {
@@ -50,6 +55,12 @@ export default class Tips {
     });
   }
 
+  /**
+   * 祝贺提示
+   * @param {String} title 祝贺标题
+   * @param {Function} onHide 回调函数
+   * @param {String} icon 图标类型字符串
+   */
   static toast(title, onHide, icon = "success") {
     setTimeout(() => {
       wx.showToast({
@@ -69,7 +80,8 @@ export default class Tips {
   }
 
   /**
-   * 警告框
+   * 警告提示
+   * @param {String} title 警告标题
    */
   static alert(title) {
     wx.showToast({
@@ -81,9 +93,10 @@ export default class Tips {
   }
 
   /**
-   * 错误框
+   * 错误提示
+   * @param {String} title 错误标题
+   * @param {Function} onHide 回调函数
    */
-
   static error(title, onHide) {
     wx.showToast({
       title: title,
@@ -100,7 +113,8 @@ export default class Tips {
   }
 
   /**
-   * 弹出加载提示
+   * 加载提示
+   * @param {String} title 标题字符串,默认 "加载中"
    */
   static loading(title = "加载中") {
     if (Tips.isLoading) {
@@ -123,6 +137,12 @@ export default class Tips {
     }
   }
 
+  /**
+   * 分享
+   * @param {String} title 标题
+   * @param {String} url 链接 URL
+   * @param {String} desc 描述
+   */
   static share(title, url, desc) {
     return {
       title: title,
