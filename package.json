@@ -1,15 +1,19 @@
 {
-  "name": "test",
-  "version": "1.2.8",
-  "description": "",
+  "name": "shop",
+  "version": "0.0.1",
+  "license": "ISC",
+  "author": "beitaz",
+  "description": "WeChat small program shop",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:beitaz/shop.git"
+  },
   "main": "dist/app.js",
   "scripts": {
     "dev": "wepy build --watch",
     "build": "cross-env NODE_ENV=production wepy build --no-cache",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "promise-polyfill": "^6.0.2",
     "wepy": "^1.5.7",

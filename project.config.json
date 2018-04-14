@@ -1,0 +1,14 @@
+{
+	"description": "项目配置文件",
+	"setting": {
+		"urlCheck": false,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"appid": "wx8d767408f4733f80",
+	"projectname": "shop",
+	"miniprogramRoot": ""
+}
