@@ -32,10 +32,10 @@ export const SEL_CLASS_CODE = "selClassCode";
  * 启动时是否显示弹幕
  * @type {Boolean}
  */
-export const SHOW_BOMB = false;
+export const SHOW_ALERT = true;
 
 /**
- * 启动弹幕类型
+ * 启动弹幕类型 ( 0: 图片, 1:领红包 )
  * @type {Number}
  */
-export const BOMB_TYPE = 0;
+export const ALERT_TYPE = 0;

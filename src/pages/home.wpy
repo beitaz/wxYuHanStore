@@ -44,7 +44,8 @@
     <bottomLoadMore :show.sync="showLoading" message="正在加载"></bottomLoadMore>
     <!--暂无数据显示-->
     <placeholder :show.sync="is_empty" message="暂无发现数据"></placeholder>
-    <!--弹屏  types:0 图片  1：领红包   show 是否显示  @close 关闭回调  @callback 点击图片回调 或确定回调-->
+    <!-- 弹屏  types:0 图片  1：领红包   show 是否显示  @close 关闭回调  @callback 点击图片回调 或确定回调 -->
+    <!-- :props.sync 动态传值;  @function.user 自定义事件处理函数(默认有 .default, .stop, .user 三种) -->
     <bombscreen :types.sync="tps" :show.sync="is_show_alert" @close.user="closeAlert" @callback.user="alertCallback"></bombscreen>
   </view>
 </template>
@@ -55,8 +56,9 @@
   import tip from '../utils/tip'
   import Discover from '../components/discover'
   import Bombscreen from '../components/bomb_screen'
-  import BottomLoadMore from "../components/common/bottomLoadMore"
-  import Placeholder from "../components/common/placeholder"
+  import BottomLoadMore from '../components/common/bottomLoadMore'
+  import Placeholder from '../components/common/placeholder'
+  import { SHOW_ALERT, ALERT_TYPE } from '../utils/constant'
   export default class Home extends wepy.page {
     config = {
       navigationBarTitleText: '素洁服装厂',
@@ -89,8 +91,8 @@
       preventRepeatReuqest: false,
       //广告列表
       adList: [],
-      tps: 0,
-      is_show_alert: true
+      tps: ALERT_TYPE,
+      is_show_alert: SHOW_ALERT
     }
     async getDiscoverList(currentPage, size) {
       let that = this;

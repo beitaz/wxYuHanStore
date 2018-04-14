@@ -88,7 +88,7 @@ export default class Tips {
       title: title,
       image: "../images/alert.png",
       mask: true,
-      duration: 1500
+      duration: 500
     });
   }
 
