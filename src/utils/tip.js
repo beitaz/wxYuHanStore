@@ -83,12 +83,12 @@ export default class Tips {
    * 警告提示
    * @param {String} title 警告标题
    */
-  static alert(title) {
+  static alert(title, duration = 500) {
     wx.showToast({
       title: title,
       image: "../images/alert.png",
       mask: true,
-      duration: 500
+      duration: duration
     });
   }
 

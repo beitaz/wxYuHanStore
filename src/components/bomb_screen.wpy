@@ -1,6 +1,6 @@
 <template>
   <view wx:if="{{show}}">
-    <view wx:if="{{types===0}}">
+    <view wx:if="{{types === 0}}">
       <view class="pop-alert-box">
         <image src="../images/icon_alert.png" class="icon_alert" @tap.stop="callback" />
         <i class="iconfont icon-close" @tap.stop="close"></i>
@@ -40,11 +40,11 @@
     events = {}
     methods = {
       close() {
-        this.show = false;
-        this.$emit("close")
+        // this.show = false; // 应该通过父组件控制显示,而不应该是这
+        this.$emit("close");  // $emit 递归通知父组件,即调用父组件方法
       },
       callback() {
-        this.$emit("callback")
+        this.$emit("callback"); // $emit 递归通知父组件,即调用父组件方法
       }
     }
     onLoad() {}

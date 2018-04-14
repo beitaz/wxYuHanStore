@@ -7,6 +7,7 @@
         </swiper-item>
       </block>
     </swiper>
+
     <view class="pos">
       <view class="search_read_only">
         <navigator class="search_content" open-type="navigate" url="/pages/search">
@@ -160,10 +161,21 @@
         }
       },
       alertCallback() {
-        tip.alert('跳转');
+        this.is_show_alert = false;
+        wx.showToast({
+          icon: 'loading',
+          title: '@TODO:跳转',
+          mask: true,
+          duration: 2000
+        });
       },
       closeAlert() {
-        tip.alert('关闭');
+        this.is_show_alert = false;
+        wx.showToast({
+          title: '关闭',
+          mask: true,
+          duration: 200
+        });
       }
     }
     events = {}

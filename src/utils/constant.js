@@ -29,13 +29,13 @@ export const ADDRESS_ID = "addressId";
 export const SEL_CLASS_CODE = "selClassCode";
 
 /**
- * 启动时是否显示弹幕
+ * 启动时是否显示弹幕 ( true:显示, false:不显示 )
  * @type {Boolean}
  */
 export const SHOW_ALERT = true;
 
 /**
- * 启动弹幕类型 ( 0: 图片, 1:领红包 )
+ * 启动弹幕类型 ( 0:图片, 1:领红包 )
  * @type {Number}
  */
 export const ALERT_TYPE = 0;
