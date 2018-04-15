@@ -84,7 +84,7 @@
     }
     globalData = {
       userInfo: null,
-      appid: 'wx6b121941b200ea50',
+      appid: 'wx8d767408f4733f80',
       secret: '36a76b0682bd2c3f1541fd012fac66f5',
     }
     constructor() {

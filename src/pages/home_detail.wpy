@@ -1,4 +1,4 @@
-<!--发现商品-->
+<!-- 发现商品 -->
 <template>
   <view>
     <view class="item">

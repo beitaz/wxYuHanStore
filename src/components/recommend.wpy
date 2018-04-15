@@ -1,10 +1,10 @@
 <template>
-  <view class="discover-wrapper">
-    <view class="discover-title">
-      <view class="title">发现好商品</view>
+  <view class="recommend-wrapper">
+    <view class="recommend-title">
+      <view class="title">商品推荐</view>
     </view>
-    <view class="discover-content">
-      <navigator class="discover" open-type="navigate" wx:for="{{list}}" wx:key="item" url="/pages/home_detail?code={{item.code}}">
+    <view class="recommend-content">
+      <navigator class="recommend" open-type="navigate" wx:for="{{list}}" wx:key="item" url="/pages/home_detail?code={{item.code}}">
         <image class="img" src="{{item.logo}}" />
         <view class="info" wx:for="{{item.attrs}}" wx:key="item">
           <view>{{item.attrName.attrName}}：</view>
@@ -18,31 +18,27 @@
 <script>
   import wepy from 'wepy';
   import api from '../api/api';
-  export default class Discover extends wepy.component {
+  export default class Recommend extends wepy.component {
     props = {
       list: []
     }
     data = {}
-    onLoad() {
-      let that = this;
-      console.log(this.list)
-    }
-    getList() {
-      console.log("调用getList方法6666666")
-    }
+    onLoad() {}
+    getList() {}
     computed = {}
     methods = {}
   }
 </script>
 
 <style lang="less">
-  .discover-wrapper {
+  .recommend-wrapper {
     background: #f7f7f7;
-    .discover-title {
+    .recommend-title {
       text-align: center;
       font-size: 30rpx;
-      padding: 30rpx 0rpx;
+      padding: 40rpx 0rpx;
       position: relative;
+      color: #333;
       .title {
         display: inline-block;
         position: relative;
@@ -62,8 +58,12 @@
         right: 0;
       }
     }
-    .discover-content {
-      .discover {
+    .recommend-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      .recommend {
+        width: 40%;
         background: #fff;
         padding: 15rpx;
         margin-bottom: 15rpx;

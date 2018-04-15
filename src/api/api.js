@@ -9,6 +9,7 @@ const apiHost = 'http://localhost:3000'
 
 
 const grabAdverts = (params) => wxRequest(params, apiHost + '/api/adverts');
+const grabDiscovers = (params) => wxRequest(params, apiHost + '/api/discovers');
 
 /**
  * 获取发现好商品接口
@@ -182,5 +183,6 @@ module.exports = {
   getMyOrderSize,getPayOrderDetail,
   getAdList,
   getSignDate,
-  grabAdverts
+  grabAdverts,
+  grabDiscovers
 }

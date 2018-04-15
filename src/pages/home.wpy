@@ -43,7 +43,8 @@
     </view>
     <!--发现好商品模块-->
     <discover :list.sync="discoverList"></discover>
-    <view class="recommend-title">商品推荐</view>
+    <recommend :list.sync="recommendList"></recommend>
+    <!-- <view class="recommend-title">商品推荐</view> -->
     <!--加载更多时动画-->
     <bottomLoadMore :show.sync="showLoading" message="正在加载"></bottomLoadMore>
     <!--暂无数据显示-->
@@ -56,10 +57,10 @@
 
 <script>
   import wepy from 'wepy'
-  import _ from 'lodash'
   import api from '../api/api'
   import tip from '../utils/tip'
   import Discover from '../components/discover'
+  import Recommend from '../components/recommend'
   import Bombscreen from '../components/bomb_screen'
   import BottomLoadMore from '../components/common/bottomLoadMore'
   import Placeholder from '../components/common/placeholder'
@@ -70,6 +71,7 @@
     }
     components = {
       discover: Discover,
+      recommend: Recommend,
       bottomLoadMore: BottomLoadMore,
       placeholder: Placeholder,
       bombscreen: Bombscreen
@@ -84,41 +86,56 @@
       duration: 1000,
       indicatorActiveColor: "#fff",
       discoverList: [],
-      //是否有数据
-      is_empty: false,
-      //当前页面
-      currentPage: 1,
-      //总页数
-      page_total: 0,
-      //是否显示 底部loading
-      showLoading: true,
-      //防止重复加载
-      preventRepeatReuqest: false,
-      //广告列表
-      adList: [],
+      recommendList: [],
+      is_empty: false, // 是否有数据
+      currentPage: 1, // 当前页面
+      page_total: 0,  // 总页数
+      showLoading: true,  // 是否显示底部 loading
+      preventRepeatReuqest: false,  // 防止重复加载
+      adList: [],  // 广告列表
       tps: ALERT_TYPE,
       is_show_alert: SHOW_ALERT
     }
-    async getDiscoverList(currentPage, size) {
+    // 获取发现好商品
+    async getDiscoverList() {
       let that = this;
-      const json = await api.getHomeDisvocerList({
+      let json = await api.getHomeDisvocerList();
+      if (json.data.code == 0) {
+        // console.log(json);
+        that.discoverList = json.data.list;
+        that.$apply();
+        // 原始数据发送到远程服务器
+        api.grabDiscovers({
+          method: 'POST',
+          query: json.data
+        });
+      }
+      that.showLoading = false;
+    }
+    // 获取推荐商品
+    async getRecommendList(currentPage, size) {
+      let that = this;
+      const json = await api.hostGoodsList({
         query: {
           page: currentPage || 1,
           size: size || 10
         }
       });
       if (json.data.code == 0) {
-        that.discoverList = [...that.discoverList, ...json.data.list];
-        if (json.data.page_total) { // 后台的数据不再返回page_total
-          that.page_total = json.data.page_total
+        // 原始数据发送到远程服务器
+        api.grabDiscovers({
+          method: 'POST',
+          query: json.data
+        });
+        console.log(json);
+        that.recommendList = [...that.recommendList, ...json.data.list];
+        if (json.data.page_total) {
+          that.page_total = json.data.page_total;
+          if (json.data.page_total == 0) {
+            that.is_empty = true; // 暂无数据
+          }
         };
-        if (json.data.page_total == 0) {
-          //暂无数据
-          that.is_empty = true;
-        }
         that.$apply();
-      } else {
-        tip.error(json.data.msg);
       }
       that.showLoading = false;
     }
@@ -127,8 +144,7 @@
       const json = await api.getAdList({
         query: {}
       });
-      console.log(json.data.list);
-      if (_.toNumber(json.data.code) === 0) {
+      if (json.data.code == 0) {
         this.adList = json.data.list;
         this.$apply();
         // 原始数据发送到远程服务器
@@ -139,22 +155,18 @@
       }
     }
     onLoad() {
-      let that = this;
       this.discoverList = [];
-      that.getDiscoverList();
       this.getAdList();
+      this.getDiscoverList();
+      this.getRecommendList();
     }
     computed = {}
     methods = {
       // 手指点击广告图片后,跳转到对应页面
       goToAdvert(advertUrl) {
-        console.log("Click and navigate to: " + advertUrl);
-        if (advertUrl.length === 0) {
-          return;
+        if (advertUrl.length !== 0) {
+          wepy.navigateTo({ url: advertUrl });
         }
-        wepy.navigateTo({
-          url: advertUrl
-        })
       },
       onShareAppMessage: function(res) {
         if (res.from === 'button') {
@@ -191,10 +203,11 @@
       }
     }
     events = {}
-    //加载更多
+    // 加载更多
     onReachBottom() {
       let that = this;
       that.showLoading = true;
+      console.log('页面滚动');
       console.log(that.page_total + "===" + that.currentPage);
       //判断总页数是否大于翻页数
       if ((that.page_total) > that.currentPage) {
@@ -204,7 +217,7 @@
         }
         that.preventRepeatReuqest = true;
         that.currentPage++;
-        that.getDiscoverList(that.currentPage);
+        that.getRecommendList(that.currentPage);
         that.preventRepeatReuqest = false;
       } else {
         that.showLoading = false;
@@ -214,13 +227,7 @@
 </script>
 
 <style lang="less">
-  .swiper {
-    height: 348rpx;
-    .slide-image {
-      width: 100%;
-      height: 100%;
-    }
-  }
+
   .search-wrapper {
     background: rgba(0, 0, 0, 0.618);
     padding: 5rpx 0;
@@ -241,6 +248,15 @@
       color: #efefee;
     }
   }
+
+  .swiper {
+    height: 348rpx;
+    .slide-image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
   .nav_list {
     color: #404040;
     display: flex;
@@ -265,10 +281,5 @@
     .nav_text {
       font-size: 26rpx
     }
-  }
-  .recommend-title {
-    padding: 40rpx 0;
-    text-align: center;
-    color: #333;
   }
 </style>
