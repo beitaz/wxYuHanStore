@@ -65,8 +65,12 @@
     .discover-content {
       .discover {
         background: #fff;
+        border-radius: 5rpx;
+        box-shadow: 5rpx 5rpx 3rpx #aaa;
         padding: 15rpx;
-        margin-bottom: 15rpx;
+        &:not(:last-child) {
+          margin-bottom: 15rpx;
+        }
         .img {
           width: 100%;
           height: 390rpx;

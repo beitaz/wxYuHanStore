@@ -1,8 +1,8 @@
 <template>
   <view>
-    <view wx:if="{{list.length>0}}">
+    <view wx:if="{{list.length > 0}}" class="comment-list">
       <repeat for="{{list}}" item="item">
-        <view class="comment-list">
+        <view class="comment">
           <view class="header">
             <image src="{{item.url}}" class="header-img" />
             <view class="name">{{item.name}}</view>
@@ -69,15 +69,15 @@
       padding-left: 10rpx;
     }
   }
-  .comment-list {
+  .comment {
     padding: 20rpx 0;
     border-bottom: 1rpx solid #efefef;
     .header {
       display: flex;
       align-items: center;
       .header-img {
-        width: 60rpx;
-        height: 60rpx;
+        width: 40rpx;
+        height: 40rpx;
       }
       .name {
         font-size: 28rpx;

@@ -4,7 +4,7 @@
       <view class="title">商品推荐</view>
     </view>
     <view class="recommend-content">
-      <navigator class="recommend" open-type="navigate" wx:for="{{list}}" wx:key="item" url="/pages/home_detail?code={{item.code}}">
+      <navigator class="recommend" open-type="navigate" wx:for="{{list}}" wx:key="item" url="/pages/goods_detail?id={{item.id}}">
         <image class="img" src="{{item.logo}}" />
         <view class="info" wx:for="{{item.attrs}}" wx:key="item">
           <view>{{item.attrName.attrName}}：</view>
@@ -63,10 +63,12 @@
       flex-wrap: wrap;
       justify-content: space-around;
       .recommend {
-        width: 40%;
+        width: 48%;
         background: #fff;
-        padding: 15rpx;
+        padding: 10 0rpx;
         margin-bottom: 15rpx;
+        border-radius: 5rpx;
+        box-shadow: 1rpx 5rpx 3rpx #aaa;
         .img {
           width: 100%;
           height: 390rpx;

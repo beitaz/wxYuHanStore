@@ -28,8 +28,15 @@ export const ADDRESS_ID = "addressId";
  */
 export const SEL_CLASS_CODE = "selClassCode";
 
+
 /**
- * 启动时是否显示弹幕 ( true:显示, false:不显示 )
+ * 启动时是否显示 "发现好商品" ( true:显示, false:不显示 )
+ * @type {Boolean}
+ */
+export const SHOW_DISCOVER = false;
+
+/**
+ * 启动时是否显示 "弹幕" ( true:显示, false:不显示 )
  * @type {Boolean}
  */
 export const SHOW_ALERT = false;

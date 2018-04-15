@@ -1,5 +1,5 @@
 <template>
-  <view style="height:{{winHeight}}rpx;overflow:hidden">
+  <view>
     <import src="../plugins/wxParse/wxParse.wxml" />
     <!--index.wxml-->
     <swiper indicator-dots="true" autoplay="true" interval="5000" duration="500" indicator-active-color="#ffc452" indicator-color="#efefef" class="swiper">
@@ -9,23 +9,38 @@
         </swiper-item>
       </block>
     </swiper>
-    <view class="details-msg">
-      <view class="details-title">{{detail.name}}</view>
-      <view class="details_pinfo">
-        <text class="price">￥{{detail.price}}</text>
-        <!--         <view class="order_time {{purchasetype==2||special==1?'hidden':''}}">
+
+    <!-- 商品价格 -->
+    <view class="block details">
+      <view class="info">{{detail.name}}</view>
+      <view class="price">
+        <view class="normal">
+          <text>零售价:</text>
+          <text class="normal-price">{{detail.price}}</text>
+        </view>
+        <!--
+          <view class="order_time {{purchasetype==2||special==1?'hidden':''}}">
             <timer :startTime.sync="startTime" :endTime.sync="endTime"></timer>
-          </view> -->
-        <view class="other-price">批发价:280</view>
-        <view class="other-price">分享价:280</view>
+          </view>
+        -->
+        <view class="whole">
+          <text>拼团价:</text>
+          <text class="whole-price">{{detail.wholePrice}}</text>
+          <text class="whole-num">({{detail.wholeNum}} 件成团)</text>
+        </view>
         <view class="share-box">
           <i class="iconfont icon-share"></i>
-          <text>分享</text>
+          <!-- <text>分享</text> -->
         </view>
       </view>
-      <view class="baoyou">满{{detail.freeShipNum}}件包邮</view>
+      <view class="tips" wx:if="{{detail.shareTips}}">{{detail.shareTips}}</view>
+      <view class="tags" wx:if="{{detail.shareTips}}">
+        <i class="iconfont icon-money"></i>
+        <text class="label">七天退换</text>
+      </view>
     </view>
-    <view class="order_num">
+
+    <!-- <view class="order_num">
       <view class="doc" wx:if="{{special == 1}}">库存:
         <text class="num">{{detail.stockNum}}件</text>
       </view>
@@ -35,10 +50,12 @@
       <view class="doc">订单中:
         <text class="num">已拼{{detail.saleCount}}件</text>
       </view>
-    </view>
-    <view class="block">
-      <!--       <view class="block_title">拼货流程</view>
-        <view class="block_content">
+    </view> -->
+
+    <!-- 商品评价 -->
+    <view class="block comments">
+      <!--       <view class="block-title">拼货流程</view>
+        <view class="block-content">
           <view class="process">
             新款展示
             <i class="iconfont icon-next"></i> 拼单结束
@@ -50,25 +67,27 @@
             如若出现特殊情况外，发货时间则会延迟5-10天左右。
           </view>
         </view> -->
-      <view class="block_title">商品评价(20)</view>
-      <view class="block_content">
+      <view class="block-title">商品评价({{commentList.length}})</view>
+      <view class="block-content">
         <commentList :list.sync="commentList"></commentList>
         <view class="button-more-cmment" wx:if="{{commentList.length!==0}}" @tap="moreComment">查看更多评论</view>
       </view>
     </view>
-    <view class="spacing"></view>
-    <view class="block">
-      <view class="block_title">拼单说明</view>
-      <view class="block_content">
+
+    <!-- 拼单说明 -->
+    <view class="block share-doc">
+      <view class="block-title">拼单说明</view>
+      <view class="block-content">
         <view class="doc">
           此商品在拼单期间可接收订单，如若超过拼单时间则不能下单；拼单结束后未付款订单系统将会自动取消，所以，亲下单以后请尽快付款。我们会以实际订单为准为您发货，如超过订单时间而又没有拼购到规定数量的，我们将会第一时间为您退款，请您放心购买!
         </view>
       </view>
     </view>
-    <view class="spacing"></view>
-    <view class="block">
-      <view class="block_title">商品信息</view>
-      <view class="block_content">
+
+    <!-- 商品信息 -->
+    <view class="block detail-infos">
+      <view class="block-title">商品信息</view>
+      <view class="block-content">
         <view class="table">
           <view class="th" wx:for="{{detail.attrList}}" key="item" item="item" wx:key="key">
             <view class="tr1" wx:for="{{item}}" key="item" item="item" wx:key="key">{{item.attrName}}:{{item.attrVal}}</view>
@@ -76,35 +95,28 @@
         </view>
       </view>
     </view>
-    <view class="spacing"></view>
-    <view class="block">
-      <view class="block_title">商品详情</view>
-    </view>
-    <view class="big_images">
-      <view class="doc">
+
+    <view class="block image-text">
+      <view class="block-title">商品详情</view>
+      <view class="block-content minute">
         <view class="wxParse-p">
           <template is="wxParse" data="{{wxParseData:detailInfo.nodes}}"></template>
         </view>
       </view>
     </view>
-    <view class="detail-bottom">
-      <view class="bottom-box">
+
+    <view class="toolbox">
+      <view class="tools">
         <view class="item"  @tap="homePage">
           <i class="iconfont icon-home"></i>
-          <view class="doc">首页</view>
         </view>
-        <!-- <contact-button class="contact"> -->
-        <contact-button class="contact">
-        </contact-button>
         <view class="item">
-          <i class="iconfont icon-message"></i>
-          <view class="doc">客服</view>
+          <contact-button type="default-dark" session-from="weapp" class="service">
+          </contact-button>
+          <!-- <button open-type="contact" class="service" plain="true">客服</button> -->
         </view>
-        <contact-button class="contact">
-        </contact-button>
         <view class="item {{isFavorite?'selec_active':''}}" @tap="takeFavorite">
           <i class="iconfont icon-collection"></i>
-          <view class="doc">收藏</view>
         </view>
         <view class="sy-bottom {{canOrder?'btn_cart':'cart_color'}}" @tap="takeCart">加入购物车</view>
         <view class="sy-bottom {{canOrder?'btn_order':'order_color'}}" @tap="takeOrder">{{purchaseText}}</view>
@@ -173,40 +185,34 @@
       //endTime: "2017-07-21 16:04:00"
       endTime: "",
       hidden: true,
-      //动画效果
-      animationData: "",
-      //购买方式:1-加购物车,2-立即购买
-      orderType: 1,
-      //购买数量
-      orderNum: 1,
-      //是否收藏
-      isFavorite: false,
+      animationData: "",  // 动画效果
+      orderType: 1,  // 购买方式: 1-加购物车,2-立即购买
+      orderNum: 1,  // 购买数量
+      isFavorite: false,  // 是否收藏
       isValidDate: true,
-      canOrder: true, //是否能下单
-      purchasetype: 1, //1-正常购买;2-补货
+      canOrder: true, // 是否能下单
+      purchasetype: 1, // 1-正常购买;2-补货
       purchaseText: "立即购买",
-      special: 0, ////0-正常入库;1-特价专区和换货专区,
+      special: 0, // 0-正常入库;1-特价专区和换货专区
       commentList: [
-        {
-          url: "../images/icon_nav_01_new.png",
-          name: "浪子天涯",
-          time: "2017-10-01 10:10",
-          content: "东西收到,很满意!!真的是超级好的卖家,解答疑问不厌其烦,细致认真,关键是东西好,而且货物发得超快,包装仔细,值得信赖!",
-          start: 4.5,
-          children: [{
-            content: "跟你交易次次都这么成功和开心的．．希望我们以后有更多的交易吧．．．哈哈"
-          }]
-        },
-        {
-          url: "../images/icon_nav_02_new.png",
-          name: "勇闯天下",
-          time: "2017-10-01 10:10",
-          content: "太感谢了，衣服很漂亮，朋友很喜欢，最主要的是买家太好了~~~大大的赞一个。。。 衣服，很合身",
-          start: 4,
-          children: []
-        }
-      ],
-      commentList1: [],
+      {
+        url: "../images/icon_nav_01_new.png",
+        name: "浪子天涯",
+        time: "2017-10-01 10:10",
+        content: "东西收到,很满意!!真的是超级好的卖家,解答疑问不厌其烦,细致认真,关键是东西好,而且货物发得超快,包装仔细,值得信赖!",
+        start: 4.5,
+        children: [{
+          content: "跟你交易次次都这么成功和开心的．．希望我们以后有更多的交易吧．．．哈哈"
+        }]
+      }, {
+        url: "../images/icon_nav_02_new.png",
+        name: "勇闯天下",
+        time: "2017-10-01 10:10",
+        content: "太感谢了，衣服很漂亮，朋友很喜欢，最主要的是买家太好了~~~大大的赞一个。。。 衣服，很合身",
+        start: 4,
+        children: []
+      }
+      ]
     }
     components = {
       commentList: CommentList
@@ -222,8 +228,7 @@
       this.winHeight = "100%";
       that.detail = {};
       that.$apply();
-      //接收上一个页面传过来的参数
-      that.goodsId = option.id;
+      that.goodsId = option.id; // 接收上一个页面传过来的参数
       if (option.purchasetype != undefined) {
         this.purchasetype = option.purchasetype;
       }
@@ -272,23 +277,30 @@
     }*/
     async getGoodsDetail() {
       let that = this;
-      //const json = await api.getGoodsDetail({
       const json = await api.goodsDetail({
         query: {
           id: that.goodsId
         }
       });
-      let time = {};
+      // let time = {};
       if (json.data.code == 0) {
         let data = json.data.data;
         that.detail = data;
+        // 原始数据发送到远程服务器
+        api.grabGoodsDetail({
+          method: 'POST',
+          query: that.detail
+        });
         WxParse.wxParse('detailInfo', 'html', that.detail.detailInfo, this);
-        time.endTime = that.detail.validEndTime;
-        time.startTime = that.detail.startTime;
+        // time.endTime = that.detail.validEndTime;
+        // time.startTime = that.detail.startTime;
         /*time.startTime ="2017-07-15 16:00:00";
         time.endTime = "2017-07-21 16:04:00";*/
-        if (json.data.validDate == "0") {
+        if (json.data.validDate == 0) {
+          console.log(json);
           that.isValidDate = false;
+          console.log(this.purchasetype + ' ' + this.special)
+          // purchasetype (1-正常购买; 2-补货)   special (0-正常入库; 1-特价专区和换货专区)
           if (this.purchasetype == 1 && this.special != 1) {
             this.canOrder = false;
           }
@@ -603,154 +615,225 @@
 <style lang="less">
   .swiper {
     height: 662rpx;
-  }
-  .slide-image {
-    width: 100%;
-    height: 100%;
-  }
-  .big_images {
-    height: 100%;
-    display: block;
-    margin-bottom: 90rpx;
-    image {
+    .slide-image {
       width: 100%;
-    }
-  }
-  .details-msg {
-    border-top: 1px solid #ededed;
-    padding: 30rpx 30rpx;
-    background: #fff;
-    .details-title {
-      overflow: hidden;
-      width: 100%;
-      box-sizing: border-box;
-      position: relative;
-      font-size: 30rpx;
-      color: #333;
-    }
-    .details-introduction {
-      color: #999;
-      font-size: 28rpx;
-      line-height: 40rpx;
-      margin-top: 20rpx;
-    }
-    .details_pinfo {
-      padding: 20rpx 0;
-      position: relative;
-      display: flex;
-      align-items: center;
-      .price {
-        color: #f73c3c;
-        font-size: 45rpx;
-      }
-      .other-price {
-        font-size: 28rpx;
-        padding-left: 40rpx
-      }
-      .share-box {
-        text-align: center;
-        font-size: 20rpx;
-        padding-left: 50rpx;
-        flex: 1;
-      }
-      .icon-share {
-        display: block;
-        padding-bottom: 5rpx;
-        font-size: 40rpx;
-      }
-      .baoyou {
-        color: #808080;
-        font-size: 28rpx;
-        margin-top: 20rpx;
-      }
-      .order_time {
-        position: absolute;
-        right: 170rpx;
-        top: 40rpx;
-      }
-    }
-  }
-  .order_num {
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 108rpx;
-    border-top: 1px solid #efefef;
-    border-bottom: 1px solid #efefef;
-    padding: 0 30rpx;
-    .doc {
-      color: #808080;
-      .num {
-        color: #f73c3c;
-      }
+      height: 100%;
     }
   }
   .block {
-    padding: 27rpx 0rpx;
+    padding: 27rpx 0rpx 0rpx 0rpx;
     background: #fff;
-    .block_title {
+    &:not(:last-child) {
+      margin-bottom: 15rpx;
+      box-shadow: 1rpx 5rpx 3rpx #aaa;
+    }
+    .block-title {
       color: #000;
       height: 30rpx;
       line-height: 30rpx;
       border-left: 6px solid #f73c3c;
       padding-left: 20rpx;
     }
-    .block_content {
-      padding: 38rpx 22rpx;
-      .process {
-        font-size: 25rpx;
-        margin: 0 auto;
-        border: 1px solid #999999;
-        padding: 10rpx;
-        border-radius: 200px;
-        text-align: center;
-        margin-bottom: 25rpx;
-        color: #808080;
+    &.details {
+      border-top: 1px solid #ededed;
+      padding: 30rpx 30rpx;
+      background: #fff;
+      .info {
+        overflow: hidden;
+        width: 100%;
+        box-sizing: border-box;
+        position: relative;
+        font-size: 30rpx;
+        color: #333;
       }
-      .doc {
-        color: #808080;
-        font-size: 26rpx;
-        line-height: 30rpx;
-      }
-    }
-    .table {
-      margin: 0 auto;
-      margin-top: -24rpx;
-      .th {
+      .price {
+        padding: 20rpx 0;
+        position: relative;
         display: flex;
+        align-items: flex-end;
         justify-content: space-between;
-        margin-top: 24rpx;
+
+        .normal {
+          .normal-price {
+            color: #f73c3c;
+            font-size: 40rpx;
+            padding-left: 10rpx;
+          }
+        }
+        .whole {
+          .whole-price {
+            font-size: 40rpx;
+            font-weight: bold;
+            padding-left: 10rpx;
+          }
+          .whole-num {
+            font-weight: bold;
+            padding-left: 10rpx;
+          }
+        }
+        .share-box {
+          text-align: right;
+          font-size: 20rpx;
+          padding-right: 20rpx;
+          // flex: 1;
+        }
+        .icon-share {
+          display: block;
+          padding-bottom: 5rpx;
+          font-size: 40rpx;
+        }
+        .baoyou {
+          color: #808080;
+          font-size: 28rpx;
+          margin-top: 20rpx;
+        }
+        .order_time {
+          position: absolute;
+          right: 170rpx;
+          top: 40rpx;
+        }
       }
-      .tr {
-        font-size: 26rpx;
-        color: #808080;
-        text-align: left;
-        flex: 1;
+      .tips {
+        color: #f73c3c;
+        font-size: 24rpx;
+        padding-bottom: 5rpx;
+        border-bottom: 1px solid #efefef;
+
+      }
+      .tags {
+        .iconfont {
+          font-size: 28rpx;
+          color: #FA587E;
+        }
+        .label {
+          font-size: 24rpx;
+          margin: 0 10rpx;
+        }
       }
     }
+    &.comments, &.share-doc, &.detail-infos, &.image-text {
+      .block-content {
+        padding: 20rpx 22rpx;
+        .process {
+          font-size: 25rpx;
+          margin: 0 auto;
+          border: 1px solid #999999;
+          padding: 10rpx;
+          border-radius: 200px;
+          text-align: center;
+          margin-bottom: 25rpx;
+          color: #808080;
+        }
+        .doc {
+          color: #808080;
+          font-size: 26rpx;
+          line-height: 30rpx;
+          text-indent: 1.5rem;
+        }
+        .table {
+          margin: 0 auto;
+          margin-top: -24rpx;
+          .th {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 24rpx;
+          }
+          .tr {
+            font-size: 26rpx;
+            color: #808080;
+            text-align: left;
+            flex: 1;
+          }
+        }
+        .button-more-cmment {
+          font-size: 28rpx;
+          height: 55rpx;
+          line-height: 55rpx;
+          text-align: center;
+          margin: 20rpx auto 0 auto;
+          width: 200rpx;
+          -moz-border-radius: 10rpx;
+          /* Firefox */
+          -webkit-border-radius: 10rpx;
+          /* Safari 和 Chrome */
+          border-radius: 10rpx;
+          /* Opera 10.5+, 以及使用了IE-CSS3的IE浏览器 */
+          color: #ff4856;
+          border: 1px solid #ff4856;
+        }
+        &.minute {
+          padding: unset;
+          margin: 20rpx 0 40rpx 0;
+          display: block;
+          image {
+            width: 100%;
+          }
+        }
+      }
+    }
+
   }
-  .detail-bottom {
+  // .order_num {
+  //   background: #fff;
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: space-between;
+  //   height: 108rpx;
+  //   border-top: 1px solid #efefef;
+  //   border-bottom: 1px solid #efefef;
+  //   padding: 0 30rpx;
+  //   .doc {
+  //     color: #808080;
+  //     .num {
+  //       color: #f73c3c;
+  //     }
+  //   }
+  // }
+  .toolbox {
     width: 100%;
     border-top: 1px solid #ededed;
     position: fixed;
     bottom: 0;
     background: #fff;
     z-index: 1001;
-    .bottom-box {
+    .tools {
       display: flex;
       align-items: center;
       justify-content: flex-end;
       position: relative;
-      .contact {
-        width: 100rpx;
-        height: 80rpx;
-        margin: 0 auto;
-        position: absolute;
+      .item {
+        flex: 1;
         text-align: center;
-        line-height: 80rpx;
-        left: 100rpx; // 在客服上面
-        opacity: 0;
+        padding: 5rpx;
+
+        &:first-child {
+          border-right: 1px solid #efefef;
+        }
+        .doc {
+          font-size: 24rpx;
+        }
+      }
+      .service {
+        vertical-align: text-bottom;
+        display: unset;
+        // width: 106rpx;
+        // height: 84rpx;
+        // margin: 0 auto;
+        // position: absolute;
+        text-align: center;
+        // line-height: 80rpx;
+        // left: 106rpx; // 在客服上面
+        // opacity: 0;
+        // line-height: unset;
+        // background-color: unset;
+        // border-radius: unset;
+        // border: unset;
+        // font-size: unset;
+        // position: unset;
+        // .iconfont {
+        //   text-align: center;
+        //   padding: auto;
+        // }
       }
     }
     .sy-bottom {
@@ -775,16 +858,7 @@
       color: #fff;
       background: #A9A9A9;
     }
-    .item:first-child {
-      border-right: 1px solid #efefef;
-    }
-    .item {
-      flex: 1;
-      text-align: center;
-      .doc {
-        font-size: 24rpx;
-      }
-    }
+    .item
     .selec_active {
       .doc {
         color: #ff4856;
@@ -947,20 +1021,5 @@
     bottom: 0;
     z-index: 10003;
   }
-  .button-more-cmment {
-    font-size: 28rpx;
-    height: 55rpx;
-    line-height: 55rpx;
-    text-align: center;
-    margin: 20rpx auto;
-    width: 200rpx;
-    -moz-border-radius: 10rpx;
-    /* Firefox */
-    -webkit-border-radius: 10rpx;
-    /* Safari 和 Chrome */
-    border-radius: 10rpx;
-    /* Opera 10.5+, 以及使用了IE-CSS3的IE浏览器 */
-    color: #ff4856;
-    border: 1px solid #ff4856;
-  }
+
 </style>
