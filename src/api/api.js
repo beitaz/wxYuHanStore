@@ -8,7 +8,7 @@ const apiHost = 'http://localhost:3000'
 //const apiMall = 'https://api.tangxinmao.com'
 
 
-const grabData = (params) => wxRequest(params, apiHost + '/api/adverts');
+const grabAdverts = (params) => wxRequest(params, apiHost + '/api/adverts');
 
 /**
  * 获取发现好商品接口
@@ -182,5 +182,5 @@ module.exports = {
   getMyOrderSize,getPayOrderDetail,
   getAdList,
   getSignDate,
-  grabData
+  grabAdverts
 }

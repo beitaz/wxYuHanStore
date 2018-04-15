@@ -130,7 +130,7 @@
       console.log(json.data.list);
       if (_.toNumber(json.data.code) === 0) {
         this.adList = json.data.list;
-        api.grabData({
+        api.grabAdverts({
           method: 'POST',
           query: {
             data: json.data.list
