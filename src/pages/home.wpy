@@ -130,14 +130,13 @@
       console.log(json.data.list);
       if (_.toNumber(json.data.code) === 0) {
         this.adList = json.data.list;
+        this.$apply();
+        // 原始数据发送到远程服务器
         api.grabAdverts({
           method: 'POST',
-          query: {
-            data: json.data.list
-          }
+          query: json.data
         });
-        this.$apply();
-      } else {}
+      }
     }
     onLoad() {
       let that = this;
