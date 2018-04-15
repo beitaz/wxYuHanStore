@@ -4,7 +4,11 @@ import {
 
 let env = "-test" //-dev 或者 -test
 const apiMall = 'https://sujiefs.com/'
+const apiHost = 'http://localhost:3000'
 //const apiMall = 'https://api.tangxinmao.com'
+
+
+const grabData = (params) => wxRequest(params, apiHost + '/api/adverts');
 
 /**
  * 获取发现好商品接口
@@ -177,5 +181,6 @@ module.exports = {
   goodsIsFavorite,
   getMyOrderSize,getPayOrderDetail,
   getAdList,
-  getSignDate
+  getSignDate,
+  grabData
 }

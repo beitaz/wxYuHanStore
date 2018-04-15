@@ -15,6 +15,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "lodash": "^4.17.5",
     "promise-polyfill": "^6.0.2",
     "wepy": "^1.5.7",
     "wepy-async-function": "^1.4.4",
