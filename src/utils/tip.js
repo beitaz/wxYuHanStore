@@ -14,7 +14,7 @@ export default class Tips {
   static success(title, duration = 500) {
     setTimeout(() => {
       wx.showToast({
-        title: title,
+        title: title || '',
         icon: "success",
         mask: true,
         duration: duration
@@ -38,7 +38,7 @@ export default class Tips {
   static confirm(text, payload = {}, title = "提示") {
     return new Promise((resolve, reject) => {
       wx.showModal({
-        title: title,
+        title: title || '',
         content: text,
         showCancel: true,
         success: res => {
@@ -64,7 +64,7 @@ export default class Tips {
   static toast(title, onHide, icon = "success") {
     setTimeout(() => {
       wx.showToast({
-        title: title,
+        title: title || '',
         icon: icon,
         mask: true,
         duration: 500
@@ -85,7 +85,7 @@ export default class Tips {
    */
   static alert(title, duration = 500) {
     wx.showToast({
-      title: title,
+      title: title || '',
       image: "../images/alert.png",
       mask: true,
       duration: duration
@@ -99,7 +99,7 @@ export default class Tips {
    */
   static error(title, duration = 500, onHide) {
     wx.showToast({
-      title: title,
+      title: title || '',
       image: "../images/error.png",
       mask: true,
       duration: duration
@@ -122,7 +122,7 @@ export default class Tips {
     }
     Tips.isLoading = true;
     wx.showLoading({
-      title: title,
+      title: title || '',
       mask: true
     });
   }
@@ -145,7 +145,7 @@ export default class Tips {
    */
   static share(title, url, desc) {
     return {
-      title: title,
+      title: title || '',
       path: url,
       desc: desc,
       success: function(res) {
