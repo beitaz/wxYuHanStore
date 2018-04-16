@@ -44,7 +44,7 @@
     }
     async getUserPoint(currentPage, size) {
       let that = this;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.pointInfo({
         query: {
@@ -65,7 +65,7 @@
     onLoad() {
       let that = this;
       that.list = [];
-      let systemInfo = wx.getStorageSync(SYSTEM_INFO);
+      let systemInfo = wepy.getStorageSync(SYSTEM_INFO);
       that.winHeight = systemInfo.windowHeight;
       that.getUserPoint();
       that.$apply();

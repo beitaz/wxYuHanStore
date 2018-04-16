@@ -69,14 +69,13 @@
     async editAddress(address) {
       console.log("保存");
       let that = this;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let isDefult = 0;
       if (this.isDefult) {
         isDefult = 1;
       }
       let openId = userSpecialInfo.openid;
-      console.log("address:");
-      console.log(this.id);
+      console.log("components/address_edit(78): this.id = ", this.id);
       const json = await api.saveAddress({
         query: {
           openId: openId,
@@ -119,7 +118,7 @@
           return false;
         }
         this.editAddress(e.detail.value);
-        console.log('form发生了submit事件，携带数据为：', e.detail.value)
+        console.log('components/address_edit(78): 提交表单数据 ', e.detail.value)
       },
       refresh(val) {
         console.log(val);

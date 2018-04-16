@@ -52,7 +52,7 @@
     }
     async getUserPoint() {
       let that = this;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.pointInfo({
         query: {
@@ -78,8 +78,8 @@
     }
     onLoad() {
       let that = this;
-      let systemInfo = wx.getStorageSync(SYSTEM_INFO);
-      let userInfo = wx.getStorageSync(USER_INFO);
+      let systemInfo = wepy.getStorageSync(SYSTEM_INFO);
+      let userInfo = wepy.getStorageSync(USER_INFO);
       that.avatarUrl = userInfo.avatarUrl;
       that.nickName = userInfo.nickName;
       that.winHeight = systemInfo.windowHeight;

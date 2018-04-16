@@ -46,3 +46,9 @@ export const SHOW_ALERT = false;
  * @type {Number}
  */
 export const ALERT_TYPE = 0;
+
+/**
+ * 测试服务器 openid
+ * @type {String}
+ */
+export const OPENID = 'oeuj50KHMqsh5kYZYWQJuwmY5yG0';

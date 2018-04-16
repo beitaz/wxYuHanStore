@@ -21,7 +21,6 @@ const grabGoodsDetail = (params) => wxRequest(params, apiHost + '/api/goods');
 
 //微信的jscode换取sessionKey
 const wxJsCode2Session = (params) => wxRequest(params, apiMall + "/api/wechat/jscode2session");
-const user2session = (params) => wxRequest(params, apiMall + "/api/wechat/user2session?jsoncallback=?");
 
 //商品接口---begin
 //首页发现商品接口
@@ -156,7 +155,6 @@ module.exports = {
   getGoodsList,
   goodsDetail,
   wxJsCode2Session,
-  user2session,
   userSginInfo,
   doSign,
   addCart, cartList, cartCheck, cartCheckAll, cartDel, cartUpdateNum,

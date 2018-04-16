@@ -291,7 +291,7 @@
           method: 'POST',
           query: that.detail
         });
-        console.log(json);
+        console.log('pages/goods_detail.wpy[getGoodsDetail] %O', json);
         WxParse.wxParse('detailInfo', 'html', that.detail.detailInfo, this);
         // time.endTime = that.detail.validEndTime;
         // time.startTime = that.detail.startTime;
@@ -317,7 +317,7 @@
     }
     async addUserBrowser() {
       let that = this;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.addBrowser({
         query: {
@@ -331,7 +331,7 @@
     //加入购物车
     async doTakeCart() {
       let that = this;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.addCart({
         query: {
@@ -364,7 +364,7 @@
     //立即购买
     async doTakeOrder() {
       let that = this;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.addCart({
         query: {
@@ -403,7 +403,7 @@
       })
       setTimeout(() => {
         this.hidden = false;
-        let systemInfo = wx.getStorageSync(SYSTEM_INFO);
+        let systemInfo = wepy.getStorageSync(SYSTEM_INFO);
         this.winHeight = systemInfo.windowHeight;
         this.$apply();
       }, 100)
@@ -411,7 +411,7 @@
     //查看商品收藏状态
     async goodsIsFavorite() {
       let that = this;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.goodsIsFavorite({
         query: {
@@ -422,7 +422,7 @@
       if (json.data.code == 0) {
         if (json.data.isFavorite == 1) {
           this.isFavorite = true;
-          console.log(this.isFavorite);
+          console.log('pages/goods_detail.wpy[goodsIsFavorite]: %O', this.isFavorite);
         } else {
           this.isFavorite = false;
         }
@@ -438,7 +438,7 @@
     //商品收藏
     async goodsFavorite() {
       let that = this;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.goodsFavorite({
         query: {
@@ -447,19 +447,18 @@
         }
       });
       if (json.data.code == 0) {
-        console.log("===========商品收藏成功=========")
         this.isFavorite = true;
         tip.toast("收藏成功");
       } else {
         console.log(json.data)
-        tip.error('收藏失败')
+        tip.error('收藏失败!')
       }
       that.$apply();
     }
     //商品取消收藏
     async goodsUnFavorite() {
       let that = this;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.goodsUnFavorite({
         query: {
@@ -468,12 +467,11 @@
         }
       });
       if (json.data.code == 0) {
-        console.log("===========商品取消收藏成功=========")
         tip.toast("取消收藏成功");
         this.isFavorite = false;
       } else {
         console.log(json.data)
-        tip.error('取消收藏失败')
+        tip.error('取消收藏失败!')
       }
       that.$apply();
     }
@@ -528,11 +526,10 @@
       takeFavorite() {
         if (this.isFavorite == true) {
           this.goodsUnFavorite();
-          console.log("取消收藏");
-          console.log(this.isFavorite);
+          console.log('pages/goods_detail.wpy[takeFavorite] 取消收藏: %O', this.isFavorite);
         } else {
           this.goodsFavorite();
-          console.log("收藏")
+          console.log("pages/goods_detail.wpy[takeFavorite] 收藏")
         }
       },
       closeModel() {
@@ -576,8 +573,8 @@
                 this.detail.goodsSkuValIds[index] = id;
                 for (var k = 0; k < this.detail.goodsSkuList.length; k++) {
                   var skuValIds = JSON.parse(this.detail.goodsSkuList[k].skuValIds).toArray;
-                  console.log("goodskuids..." + this.detail.goodsSkuList[k].skuValIds);
-                  console.log("this goodskuids..." + this.detail.goodsSkuValIds);
+                  console.log("pages/goods_detail.wpy[selAttr] goodskuids: %O", this.detail.goodsSkuList[k].skuValIds);
+                  console.log("this goodskuids %O", this.detail.goodsSkuValIds);
                   if ("[" + this.detail.goodsSkuValIds.toString() + "]" === this.detail.goodsSkuList[k].skuValIds) {
                     console.log("goodskuids equals...");
                     this.detail.stockNum = this.detail.goodsSkuList[k].stockNum;
@@ -594,7 +591,7 @@
       onShareAppMessage: function(res) {
         if (res.from === 'button') {
           // 来自页面内转发按钮
-          console.log(res.target)
+          console.log('pages/goods_detail.wpy[onShareAppMessage] 页面内转发: %O', res.target)
         }
         return {
           title: this.detail.name,

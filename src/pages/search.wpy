@@ -69,7 +69,7 @@
       skuval: ""
     }
     async getKeyWordHisList() {
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.searchKeywordList({
         query: {
@@ -128,7 +128,7 @@
       that.showLoading = false;
       that.$apply();
       if (keyword.length > 0) {
-        let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+        let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
         let openId = userSpecialInfo.openid;
         const resultJson = await api.addSearchKeyword({
           query: {
@@ -139,7 +139,7 @@
       }
     }
     async clearUserKeywords() {
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.clearSearchKeyword({
         query: {

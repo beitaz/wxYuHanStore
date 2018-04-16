@@ -36,13 +36,14 @@
     }
     async getUserAddress(phone, code) {
       let that = this;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.getUserAddress({
         query: {
           openId: openId
         }
       });
+      console.log(json)
       if (json.data.code == 0) {
         this.addressList = json.data.list;
         this.$invoke("addressList", "refreshList", this.addressList);
@@ -53,7 +54,7 @@
     }
     async receiverInf(id) {
       let that = this;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       const json = await api.receiverInfoById({
         query: {
           id: id
@@ -62,7 +63,7 @@
       if (json.data.code == 0) {
         this.receiverInfo = json.data.receiverInfo;
         this.$invoke("addressEdit", "refresh", this.receiverInfo);
-        console.log("=================================")
+        console.log("pages/address.wpy(66): 手动调用 addressEdit 组件的 refresh 方法,参数为 %O" + this.receiverInfo)
       } else {
         tip.error(json.data.msg)
       }

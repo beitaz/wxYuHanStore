@@ -69,7 +69,7 @@
     }
     async getUserSign() {
       let that = this;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.userSginInfo({
         query: {
@@ -94,7 +94,7 @@
         return;
       }
       that.signing = true;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.doSign({
         query: {
@@ -119,7 +119,7 @@
     }
     onLoad() {
       let that = this;
-      let systemInfo = wx.getStorageSync(SYSTEM_INFO);
+      let systemInfo = wepy.getStorageSync(SYSTEM_INFO);
       console.log("." + systemInfo.windowHeight);
       that.winHeight = systemInfo.windowHeight;
       that.getUserSign();

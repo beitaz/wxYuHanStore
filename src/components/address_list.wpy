@@ -55,7 +55,7 @@
     }
     async delUserAddress(id) {
       let that = this;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       const json = await api.delUserAddress({
         query: {
           id: id,
@@ -102,7 +102,7 @@
         }
         var id = e.currentTarget.dataset.id;
         console.log("id==" + id);
-        wx.setStorageSync(ADDRESS_ID, id);
+        wepy.setStorageSync(ADDRESS_ID, id);
         wepy.redirectTo({
           url: "/pages/comfire_order?from=selAdd"
         })

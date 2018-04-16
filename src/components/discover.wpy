@@ -23,13 +23,7 @@
       list: []
     }
     data = {}
-    onLoad() {
-      let that = this;
-      console.log(this.list)
-    }
-    getList() {
-      console.log("调用getList方法6666666")
-    }
+    onLoad() {}
     computed = {}
     methods = {}
   }

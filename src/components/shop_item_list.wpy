@@ -50,7 +50,7 @@
       // }
     }
     async applyRefund(itemId) {
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.refundApply({
         query: {

@@ -7,11 +7,11 @@
     USER_INFO,
     SYSTEM_INFO,
     ADDRESS_ID,
-    SEL_CLASS_CODE
+    SEL_CLASS_CODE,
+    OPENID
   } from "./utils/constant";
   import {
-    wxJsCode2Session,
-    user2session
+    wxJsCode2Session
   } from './api/api';
   export default class extends wepy.app {
     config = {
@@ -83,9 +83,7 @@
       }
     }
     globalData = {
-      userInfo: null,
-      appid: 'wx8d767408f4733f80',
-      secret: '36a76b0682bd2c3f1541fd012fac66f5',
+      userInfo: null
     }
     constructor() {
       super()
@@ -93,70 +91,32 @@
       this.use('promisify');
     }
     async onLaunch() {
-      let that = this;
-      //用户信息
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      // 用户信息
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       // 用户普通信息
-      let userInfo = wx.getStorageSync(USER_INFO) || {};
-      //如果信息过期
+      let userInfo = wepy.getStorageSync(USER_INFO) || {};
+      // 如果信息过期
       if ((!userSpecialInfo.openid || (userSpecialInfo.expires_in || Date.now()) < (Date.now() + 600)) && (!userInfo.nickName)) {
         let res = await wepy.login();
         if (res.code) {
-          let d = that.globalData; //这里存储了appid、secret、token串    
-          //存储userInfo 
-          let c = await wepy.getUserInfo();
-          wx.setStorageSync(USER_INFO, c.userInfo);
-          //存储系统信息 
-          let systemInfo = wepy.getSystemInfoSync();
-          wx.setStorageSync(SYSTEM_INFO, systemInfo);
+          let wxUserInfo = await wepy.getUserInfo();
+          wepy.setStorageSync(USER_INFO, wxUserInfo.userInfo);  // 存储用户信息
+          wepy.setStorageSync(SYSTEM_INFO, wepy.getSystemInfoSync());  // 存储系统信息 
           wxJsCode2Session({
             query: {
               jsCode: res.code,
-              nickName: c.userInfo.nickName
+              nickName: wxUserInfo.userInfo.nickName
             }
           }).then(resp => {
-            var rlt = resp.data;
-            console.log("wxJsCode2Session..." + JSON.stringify(rlt));
+            let rlt = resp.data;
+            console.log("wxJsCode2Session 结果: %O", rlt);
             if (rlt.result) {
-              var data = rlt.data;
-              if (data.openid) {
-                let obj = {};
-                obj.openid = data.openid;
-                obj.expires_in = Date.now() + data.expires_in;
-                //存储openid 
-                wx.setStorageSync(USER_SPECICAL_INFO, obj);
-              }
+              let data = rlt.data;
+              wepy.setStorageSync(USER_SPECICAL_INFO, {openid: data.openid, expires_in: Date.now() + data.expires_in});
             } else {
-              let obj = {};
-              obj.openid = "oeuj50KHMqsh5kYZYWQJuwmY5yG0";
-              obj.expires_in = "7200";
-              //存储openid 
-              wx.setStorageSync(USER_SPECICAL_INFO, obj);
+              wepy.setStorageSync(USER_SPECICAL_INFO, {openid: OPENID, expires_in: '7200'});
             }
           });
-          let url = 'https://api.weixin.qq.com/sns/jscode2session?appid=' + d.appid + '&secret=' + d.secret + '&js_code=' + res.code + '&grant_type=authorization_code';
-          /* let b = await wepy.request({
-               url: url,
-               data: {},
-               method: 'POST',
-               header: {
-                   'content-Type': 'application/x-www-form-urlencoded'
-               }
-           });
-           if (b.data.openid) {
-               let obj = {};
-               obj.openid = b.data.openid;
-               obj.expires_in = Date.now() + b.data.expires_in;
-               //存储openid 
-               wx.setStorageSync(USER_SPECICAL_INFO, obj);
-               //存储userInfo 
-               let c = await wepy.getUserInfo();
-               wx.setStorageSync(USER_INFO, c.userInfo);
-               //存储系统信息 
-               let systemInfo = await wepy.getSystemInfoSync();
-               wx.setStorageSync(SYSTEM_INFO, systemInfo);
-               console.log(b, '登陆成功')
-           }*/
         } else {
           console.log('获取用户登录态失败！' + res.errMsg)
         }

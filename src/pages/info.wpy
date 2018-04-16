@@ -92,7 +92,7 @@
     }
     async getUserInfo(phone, code) {
       let that = this;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.getUserInfo({
         query: {
@@ -100,8 +100,8 @@
         }
       });
       if (json.data.code == 0) {
-        console.log(json.data);
         let user = json.data.user;
+        console.log(user ? user : 'pages/info.wpy(104): 未找到用户信息');
         if (user) {
           this.bShowBind = !user.mobile.length > 0
         } else {
@@ -115,7 +115,7 @@
     }
     onLoad() {
       let that = this;
-      let userInfo = wx.getStorageSync(USER_INFO);
+      let userInfo = wepy.getStorageSync(USER_INFO);
       that.avatarUrl = userInfo.avatarUrl;
       that.nickName = userInfo.nickName;
     }

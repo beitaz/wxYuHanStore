@@ -68,7 +68,7 @@
       if (json.data.code == 0) {
         this.rootcateList = json.data.list;
         if (this.rootcateList.length > 0) {
-          let selCode = wx.getStorageSync(SEL_CLASS_CODE);
+          let selCode = wepy.getStorageSync(SEL_CLASS_CODE);
           var selRottCateCode = this.rootcateList[0].code;
           if (selCode.length == 0) {
             this.rootcateList[0].active = true;
@@ -90,10 +90,10 @@
     onLoad() {
       let that = this;
       //this.list = aa.data;
-      let systemInfo = wx.getStorageSync(SYSTEM_INFO);
+      let systemInfo = wepy.getStorageSync(SYSTEM_INFO);
       this.windowHeight = systemInfo.windowHeight;
       this.$apply();
-      console.log(aa)
+      // console.log(aa)
     }
     onShow() {
       this.getRootCateTopLevel();
@@ -104,7 +104,7 @@
         console.log("changecate....");
         let code = e.currentTarget.dataset.code;
         this.getChildCate(code);
-        wx.setStorageSync(SEL_CLASS_CODE, code);
+        wepy.setStorageSync(SEL_CLASS_CODE, code);
         //设置一级分类的选中状态
         for (var i = 0; i < this.rootcateList.length; i++) {
           var rootCate = this.rootcateList[i];

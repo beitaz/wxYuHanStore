@@ -64,7 +64,7 @@
       let that = this;
       console.log("=======province=======");
       console.log(that.province);
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let isDefult = 0;
       if (this.isDefult) {
         isDefult = 1;

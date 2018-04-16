@@ -103,7 +103,6 @@
       let that = this;
       let json = await api.getHomeDisvocerList();
       if (json.data.code == 0) {
-        // console.log(json);
         that.discoverList = json.data.list;
         that.$apply();
         // 原始数据发送到远程服务器
@@ -172,7 +171,7 @@
       onShareAppMessage: function(res) {
         if (res.from === 'button') {
           // 来自页面内转发按钮
-          console.log(res.target)
+          console.log('pages/home.wpy[onShareAppMessage]: %O', res.target);
         }
         return {
           title: this.navigationBarTitleText,

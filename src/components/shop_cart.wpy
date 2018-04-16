@@ -79,7 +79,7 @@
     //获取购物车商品列表
     async getCartList() {
       let that = this;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.cartList({
         query: {
@@ -110,7 +110,7 @@
     }
     computed = {}
     async checkGoods(id, index, ischecked) {
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.cartCheck({
         query: {
@@ -132,7 +132,7 @@
       this.$apply();
     }
     async reduceGoodNum(id, num, index) {
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.cartUpdateNum({
         query: {
@@ -152,7 +152,7 @@
       this.$apply();
     }
     async addGoodNum(id, num, index) {
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.cartUpdateNum({
         query: {
@@ -173,7 +173,7 @@
     }
     async deleteGoods(itemData) {
       var id = itemData.id;
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.cartDel({
         query: {
@@ -201,7 +201,7 @@
       this.$apply();
     }
     async checkAllGoods() {
-      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       let check = 0;
       if (!this.allChecked) { //原来未选中
