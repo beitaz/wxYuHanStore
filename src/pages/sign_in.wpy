@@ -1,3 +1,4 @@
+<!-- 签到有礼 -->
 <template>
   <view class="sgin_in">
     <image src="../images/bc_qdyl.png" class="head_bc" />
@@ -25,7 +26,7 @@
     <view class="tab_box">
       <tab @currentTab.user="getCurrentTab" :currentTab.sync="currentTab" :tabList.sync="tabList"></tab>
     </view>
-    <scroll-view scroll-y="true" class="swiper-item-box" style="height:{{winHeight - 275}}px">
+    <scroll-view scroll-y="true" class="swiper-item-box">
       <!-- 积分规则 -->
       <pointsRule wx:if="{{currentTab==0}}"></pointsRule>
       <!-- 积分记录 -->
@@ -58,7 +59,6 @@
     }
     data = {
       currentTab: 0,
-      winHeight: 0,
       tabList: ["积分规则", "获得记录"],
       signed: false,
       score: 0,
@@ -84,7 +84,8 @@
         console.log("jefe==", that.signList);
         that.$apply();
       } else {
-        tip.error(json.data.msg)
+        console.error("获取用户登录信息失败: %O", json);
+        tip.error('数据加载失败', 1000);
       }
       that.showLoading = false;
     }
@@ -111,19 +112,15 @@
         that.$apply();
       } else {
         wepy.showToast({
-          title: json.data.msg,
+          title: json.data.msg || '',
           images: '../images/error.png',
-          duration: 5000
+          duration: 1000
         })
       }
     }
     onLoad() {
-      let that = this;
-      let systemInfo = wepy.getStorageSync(SYSTEM_INFO);
-      console.log("." + systemInfo.windowHeight);
-      that.winHeight = systemInfo.windowHeight;
-      that.getUserSign();
-      that.$apply();
+      this.getUserSign();
+      this.$apply();
     }
     computed = {}
     methods = {

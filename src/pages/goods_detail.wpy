@@ -291,7 +291,7 @@
           method: 'POST',
           query: that.detail
         });
-        console.log('pages/goods_detail.wpy[getGoodsDetail] %O', json);
+        console.log('getGoodsDetail %O', json);
         WxParse.wxParse('detailInfo', 'html', that.detail.detailInfo, this);
         // time.endTime = that.detail.validEndTime;
         // time.startTime = that.detail.startTime;
@@ -299,7 +299,7 @@
         time.endTime = "2017-07-21 16:04:00";*/
         if (json.data.validDate == 0) {
           that.isValidDate = false;
-          console.log(this.purchasetype + ' ' + this.special)
+          console.log('this.purchasetype = %d, this.special = %d', this.purchasetype, this.special)
           // purchasetype (1-正常购买; 2-补货)   special (0-正常入库; 1-特价专区和换货专区)
           if (this.purchasetype == 1 && this.special != 1) {
             this.canOrder = false;
@@ -422,7 +422,7 @@
       if (json.data.code == 0) {
         if (json.data.isFavorite == 1) {
           this.isFavorite = true;
-          console.log('pages/goods_detail.wpy[goodsIsFavorite]: %O', this.isFavorite);
+          console.log('goodsIsFavorite: %O', this.isFavorite);
         } else {
           this.isFavorite = false;
         }
@@ -526,10 +526,10 @@
       takeFavorite() {
         if (this.isFavorite == true) {
           this.goodsUnFavorite();
-          console.log('pages/goods_detail.wpy[takeFavorite] 取消收藏: %O', this.isFavorite);
+          console.log('takeFavorite 取消收藏: %O', this.isFavorite);
         } else {
           this.goodsFavorite();
-          console.log("pages/goods_detail.wpy[takeFavorite] 收藏")
+          console.log("takeFavorite 收藏")
         }
       },
       closeModel() {
@@ -573,7 +573,7 @@
                 this.detail.goodsSkuValIds[index] = id;
                 for (var k = 0; k < this.detail.goodsSkuList.length; k++) {
                   var skuValIds = JSON.parse(this.detail.goodsSkuList[k].skuValIds).toArray;
-                  console.log("pages/goods_detail.wpy[selAttr] goodskuids: %O", this.detail.goodsSkuList[k].skuValIds);
+                  console.log("selAttr goodskuids: %O", this.detail.goodsSkuList[k].skuValIds);
                   console.log("this goodskuids %O", this.detail.goodsSkuValIds);
                   if ("[" + this.detail.goodsSkuValIds.toString() + "]" === this.detail.goodsSkuList[k].skuValIds) {
                     console.log("goodskuids equals...");
@@ -591,7 +591,7 @@
       onShareAppMessage: function(res) {
         if (res.from === 'button') {
           // 来自页面内转发按钮
-          console.log('pages/goods_detail.wpy[onShareAppMessage] 页面内转发: %O', res.target)
+          console.log('onShareAppMessage 页面内转发: %O', res.target)
         }
         return {
           title: this.detail.name,

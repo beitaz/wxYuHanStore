@@ -1,3 +1,4 @@
+<!-- 搜索商品 -->
 <template>
   <view>
     <view class="top_search">

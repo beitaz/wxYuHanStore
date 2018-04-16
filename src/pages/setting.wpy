@@ -1,4 +1,4 @@
-<!--我的消息-->
+<!-- 个人设置 -->
 <template>
   <view class="setting">
     <scroll-view scroll-y="true" class="swiper-item-box">
@@ -32,8 +32,7 @@
     config = {
       navigationBarTitleText: '设置',
     }
-    components = {
-    }
+    components = {}
     data = {
       userInfo: {},
       winHeight: 0

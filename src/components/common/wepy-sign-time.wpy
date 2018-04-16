@@ -1,3 +1,4 @@
+<!-- 签到 -->
 <template>
   <view class="time_line_box">
     <view class="time_line" style="width:100%">
@@ -30,8 +31,6 @@
       // }
     }
     async getSignDate() {
-      console.log("getSignDate");
-      let that = this;
       let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.getSignDate({
@@ -41,12 +40,12 @@
       });
       if (json.data.code == 0) {
         this.list = json.data.list;
-        console.log("console.log(this.list);");
-        console.log(this.list);
+        console.log("所有签到信息: %O", this.list);
       } else {
-        tip.error(json.data.msg)
+        console.error("签到错误: %O", json);
+        tip.error('数据加载失败', 1000);
       }
-      that.showLoading = false;
+      this.showLoading = false;
       this.$apply()
     }
     onLoad() {

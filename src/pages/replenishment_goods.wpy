@@ -1,4 +1,4 @@
-<!--我要补货-->
+<!-- 我要补货 -->
 <template>
   <view>
     <view class="tab_box">

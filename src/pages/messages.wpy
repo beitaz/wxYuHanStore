@@ -1,5 +1,4 @@
-
-<!--我的消息-->
+<!-- 我的消息 -->
 <template>
   <view class="messages">
     <scroll-view scroll-y="true" class="swiper-item-box" style="height:{{winHeight}}px" bindscrolltolower="onReachBottom">

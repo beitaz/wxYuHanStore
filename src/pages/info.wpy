@@ -101,12 +101,8 @@
       });
       if (json.data.code == 0) {
         let user = json.data.user;
-        console.log(user ? user : 'pages/info.wpy(104): 未找到用户信息');
-        if (user) {
-          this.bShowBind = !user.mobile.length > 0
-        } else {
-          tip.error('未找到用户信息', 1000);
-        }
+        console.log(user ? user : '未找到用户信息');
+        user ? (this.bShowBind = !(user.mobile.length > 0)) : tip.error('未找到用户信息', 1000)
         that.$apply();
       } else {
         tip.error(json.data.msg)
