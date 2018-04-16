@@ -17,12 +17,8 @@ const grabGoodsDetail = (params) => wxRequest(params, apiHost + '/api/goods');
 
 
 
-/**
- * 获取发现好商品接口
- * @param  {[type]} params [description]
- * @return {[type]}        [description]
- */
-const getDiscoverList = (params) => wxRequest(params, apiMall + '/goods/list?cateidOne=1&cateidTwo=0&price=0&sales=2');
+// 获取发现好商品接口 (已废弃)
+// const getDiscoverList = (params) => wxRequest(params, apiMall + '/goods/list?cateidOne=1&cateidTwo=0&price=0&sales=2');
 
 //微信的jscode换取sessionKey
 const wxJsCode2Session = (params) => wxRequest(params, apiMall + "/api/wechat/jscode2session");
@@ -157,7 +153,7 @@ const getAdList = (params) => wxRequest(params, apiMall + '/api/adverts/list');
 
 module.exports = {
   hostGoodsList,
-  getDiscoverList, getHomeDisvocerList,
+  getHomeDisvocerList,
   getGoodsList,
   goodsDetail,
   wxJsCode2Session,

@@ -99,10 +99,9 @@
       showDiscover: SHOW_DISCOVER // 控制是否显示
     }
     // 获取发现好商品
-    async getDiscoverList() {
+    async getHomeDisvocerList() {
       let that = this;
-      // let json = await api.getHomeDisvocerList();
-      let json = await api.getDiscoverList();
+      let json = await api.getHomeDisvocerList();
       if (json.data.code == 0) {
         // console.log(json);
         that.discoverList = json.data.list;
@@ -159,7 +158,7 @@
     onLoad() {
       this.discoverList = [];
       this.getAdList();
-      this.getDiscoverList();
+      this.getHomeDisvocerList();
       this.getHostGoodsList();
     }
     computed = {}
