@@ -1,42 +1,33 @@
-### 安装（更新） wepy 命令行工具。
-	npm install wepy-cli -g
+# Shop
 
-### 安装依赖包
-	npm install
+## 基本配置
 
-### 开发实时编译。
-	npm run dev
+```shell
+$ npm install wepy-cli -g
+$ npm install
+$ npm run build   # 上传代码前先编译压缩文件大小，否则体积过大无法上传
+$ npm run dev
+> ...
+> [15:28:54] [信息] 开始监听文件改动。
+```
 
-### 生产压缩
-	npm run build //上传代码时，请先执行此代码，否则会提示包体积过大
+## 注意事项
 
+* 使用微信开发者工具-->添加项目，项目目录请选择dist目录。
 
-### 开发使用说明(重要)
+* 微信开发者工具-->项目-->关闭ES6转ES5。 **`重要：漏掉此项会运行报错`**
 
-1、使用微信开发者工具-->添加项目，项目目录请选择dist目录。
+* 微信开发者工具-->项目-->关闭上传代码时样式自动补全。  **`重要：某些情况下漏掉此项也会运行报错`**
 
-2、微信开发者工具-->项目-->关闭ES6转ES5。 <font color=red>重要：漏掉此项会运行报错。</font> 
+* 微信开发者工具-->项目-->关闭代码压缩上传。  **`重要：开启后，会导致真机computed, props.sync 等等属性失效`**
 
-3、微信开发者工具-->项目-->关闭上传代码时样式自动补全。  <font color=red>重要：某些情况下漏掉此项也会运行报错。</font> 
+## 相关文档
 
-4、微信开发者工具-->项目-->关闭代码压缩上传。  <font color=red>重要：开启后，会导致真机computed, props.sync 等等属性失效。</font> 
+* [wepy开发文档地址](https://tencent.github.io/wepy/)
 
+* [小程序开发文档](http://mp.weixin.qq.com/debug/wxadoc/dev/)
 
-
-### wepy开发文档地址
-	https://tencent.github.io/wepy/
-
-### 小程序开发文档
-	http://mp.weixin.qq.com/debug/wxadoc/dev/
-
-### 演示地址
-
-打开微信扫一扫
-
-<img src="https://github.com/dyq086/wxYuHanStore/blob/master/screenshots/qr.jpg" width="200" height="200"/> 
-
-    
-### 目录结构
+## 目录结构
 
     ├── api
     │   └── api.js              //接口
@@ -106,7 +97,7 @@
     │       ├── wxDiscode.js
     │       ├── wxParse.js
     │       ├── wxParse.wxml
-    │       └── wxParse.wxss    
+    │       └── wxParse.wxss
     ├── styles                  //样式
     │   ├── base.less
     │   ├── icon.less           // 图标文件
@@ -118,41 +109,3 @@
         ├── tip.js                  //提示弹框组件
         ├── util.js                 //工具
         └── wxRequest.js            //ajax请求
-
-
-
-
-### 部分功能截图
-
-
-<img src="https://github.com/dyq086/wxYuHanStore/blob/master/screenshots/WechatIMG263.jpeg" width="365" height="619" /> 	<img src="https://github.com/dyq086/wxYuHanStore/blob/master/screenshots/WechatIMG264.jpeg" width="365" height="619"/> 
-
-
-<img src="https://github.com/dyq086/wxYuHanStore/blob/master/screenshots/WechatIMG265.jpeg" width="365" height="619"/> 		<img src="https://github.com/dyq086/wxYuHanStore/blob/master/screenshots/WechatIMG266.jpeg" width="365" height="619"/> 
-
-<img src="https://github.com/dyq086/wxYuHanStore/blob/master/screenshots/WechatIMG267.jpeg" width="365" height="619"/>		 <img src="https://github.com/dyq086/wxYuHanStore/blob/master/screenshots/WechatIMG268.jpeg" width="365" height="619"/> 
-
-<img src="https://github.com/dyq086/wxYuHanStore/blob/master/screenshots/WechatIMG269.jpeg" width="365" height="619"/>		 <img src="https://github.com/dyq086/wxYuHanStore/blob/master/screenshots/WechatIMG270.jpeg" width="365" height="619"/> 
-
-
-<img src="https://github.com/dyq086/wxYuHanStore/blob/master/screenshots/WechatIMG271.jpeg" width="365" height="619"/>		 <img src="https://github.com/dyq086/wxYuHanStore/blob/master/screenshots/WechatIMG272.jpeg" width="365" height="619"/> 
-
-<img src="https://github.com/dyq086/wxYuHanStore/blob/master/screenshots/WechatIMG273.jpeg" width="365" height="619"/>		 <img src="https://github.com/dyq086/wxYuHanStore/blob/master/screenshots/WechatIMG274.jpeg" width="365" height="619"/> 
-
-<img src="https://github.com/dyq086/wxYuHanStore/blob/master/screenshots/WechatIMG275.jpeg" width="365" height="619"/> 
-
-
-
-### 说明
-
-此小程序借助于wepy进行高度的组件封装，仅供学习参考。喜欢就动手点个star吧~^o^~
-
-### 如需帮助或咨询请加
-qq:490844594
-
-### 友情赞助
-如果本项目对你有较大的帮助，可以对我打赏，否则不需要，随便放个二维码，看看有没有对我特别好的小伙伴 ~ 哈哈
-
-
-<img src="https://github.com/dyq086/wxYuHanStore/blob/master/screenshots/WechatIMG276.jpg" width="400" height="400"/> 
-
