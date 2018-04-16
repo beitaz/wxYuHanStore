@@ -101,7 +101,8 @@
     // 获取发现好商品
     async getDiscoverList() {
       let that = this;
-      let json = await api.getHomeDisvocerList();
+      // let json = await api.getHomeDisvocerList();
+      let json = await api.getDiscoverList();
       if (json.data.code == 0) {
         // console.log(json);
         that.discoverList = json.data.list;

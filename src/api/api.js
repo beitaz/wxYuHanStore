@@ -3,14 +3,19 @@ import {
 } from '../utils/wxRequest';
 
 let env = "-test" //-dev 或者 -test
-const apiMall = 'https://sujiefs.com/'
+const apiMall = 'https://sujiefs.com'
 const apiHost = 'http://localhost:3000'
 //const apiMall = 'https://api.tangxinmao.com'
 
-
+/**
+ * 发送数据到服务器
+ * @param {Object} params 请求参数 {method: 'POST', data: json}
+ */
 const grabAdverts = (params) => wxRequest(params, apiHost + '/api/adverts');
 const grabDiscovers = (params) => wxRequest(params, apiHost + '/api/discovers');
 const grabGoodsDetail = (params) => wxRequest(params, apiHost + '/api/goods');
+
+
 
 /**
  * 获取发现好商品接口

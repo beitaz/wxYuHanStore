@@ -1,4 +1,4 @@
-<!--商品列表模块-->
+<!-- 商品列表模块 -->
 <template>
   <scroll-view scroll-y="true" class="swiper-item-box">
     <view class="shop_item">

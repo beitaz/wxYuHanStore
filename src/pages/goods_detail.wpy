@@ -85,7 +85,7 @@
     </view>
 
     <!-- 商品信息 -->
-    <view class="block detail-infos">
+    <view class="block detail-infos" wx:if="{{detail.attrList.length > 0}}">
       <view class="block-title">商品信息</view>
       <view class="block-content">
         <view class="table">
@@ -115,15 +115,15 @@
           </contact-button>
           <!-- <button open-type="contact" class="service" plain="true">客服</button> -->
         </view>
-        <view class="item {{isFavorite?'selec_active':''}}" @tap="takeFavorite">
-          <i class="iconfont icon-collection"></i>
+        <view class="item {{isFavorite ? 'selec_active' : ''}}" @tap="takeFavorite">
+          <i class="iconfont icon-star-outline"></i>
         </view>
-        <view class="sy-bottom {{canOrder?'btn_cart':'cart_color'}}" @tap="takeCart">加入购物车</view>
-        <view class="sy-bottom {{canOrder?'btn_order':'order_color'}}" @tap="takeOrder">{{purchaseText}}</view>
+        <view class="sy-bottom {{canOrder ? 'btn_cart' : 'cart_color'}}" @tap="takeCart">加入购物车</view>
+        <view class="sy-bottom {{canOrder ? 'btn_order' : 'order_color'}}" @tap="takeOrder">{{purchaseText}}</view>
       </view>
     </view>
-    <view class="over_model {{hidden?'hidden':''}}"></view>
-    <view class="panle_model {{hidden?'hidden':''}}" animation="{{animationData}}">
+    <view class="over_model {{hidden ? 'hidden' : ''}}"></view>
+    <view class="panle_model {{hidden ? 'hidden' : ''}}" animation="{{animationData}}">
       <view class="model_content">
         <view class="head_box">
           <view class="img_wrap">
@@ -138,7 +138,7 @@
           <view class="rule_box" wx:for="{{detail.goodsSkuNameList}}" item="item" wx:key="key" wx:for-index="ex">
             <view class="title">{{item.skuName}}</view>
             <view class="items">
-              <view class="item {{item.current?'active':''}}" wx:for="{{item.skuValList}}" item="item" wx:key="key" @tap.stop="selAttr" data-id="{{item.skuValId}}" data-nameid="{{item.skuNameId}}" data-index="{{ex}}">{{item.skuVal}}</view>
+              <view class="item {{item.current ? 'active' : ''}}" wx:for="{{item.skuValList}}" item="item" wx:key="key" @tap.stop="selAttr" data-id="{{item.skuValId}}" data-nameid="{{item.skuNameId}}" data-index="{{ex}}">{{item.skuVal}}</view>
             </view>
           </view>
           <view class="num_box">
@@ -189,7 +189,7 @@
       orderType: 1,  // 购买方式: 1-加购物车,2-立即购买
       orderNum: 1,  // 购买数量
       isFavorite: false,  // 是否收藏
-      isValidDate: true,
+      isValidDate: true, // 活动有效过期内
       canOrder: true, // 是否能下单
       purchasetype: 1, // 1-正常购买;2-补货
       purchaseText: "立即购买",
@@ -291,13 +291,13 @@
           method: 'POST',
           query: that.detail
         });
+        console.log(json);
         WxParse.wxParse('detailInfo', 'html', that.detail.detailInfo, this);
         // time.endTime = that.detail.validEndTime;
         // time.startTime = that.detail.startTime;
         /*time.startTime ="2017-07-15 16:00:00";
         time.endTime = "2017-07-21 16:04:00";*/
         if (json.data.validDate == 0) {
-          console.log(json);
           that.isValidDate = false;
           console.log(this.purchasetype + ' ' + this.special)
           // purchasetype (1-正常购买; 2-补货)   special (0-正常入库; 1-特价专区和换货专区)
@@ -804,8 +804,7 @@
       .item {
         flex: 1;
         text-align: center;
-        padding: 5rpx;
-
+        padding: 18rpx 0;
         &:first-child {
           border-right: 1px solid #efefef;
         }
@@ -820,6 +819,10 @@
         // height: 84rpx;
         // margin: 0 auto;
         // position: absolute;
+        i {
+          width: 16rpx !important;
+          height: 16rpx !important;
+        }
         text-align: center;
         // line-height: 80rpx;
         // left: 106rpx; // 在客服上面
