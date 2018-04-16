@@ -97,12 +97,12 @@ export default class Tips {
    * @param {String} title 错误标题
    * @param {Function} onHide 回调函数
    */
-  static error(title, onHide) {
+  static error(title, duration = 500, onHide) {
     wx.showToast({
       title: title,
       image: "../images/error.png",
       mask: true,
-      duration: 500
+      duration: duration
     });
     // 隐藏结束回调
     if (onHide) {

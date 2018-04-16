@@ -38,7 +38,7 @@
   import tip from '../utils/tip'
   export default class HomeDetail extends wepy.page {
     config = {
-      navigationBarTitleText: '',
+      navigationBarTitleText: '主页详情',
     }
     data = {
       catCode: "",

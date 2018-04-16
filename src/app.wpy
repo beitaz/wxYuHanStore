@@ -95,9 +95,9 @@
     async onLaunch() {
       let that = this;
       //用户信息
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       // 用户普通信息
-      let userInfo = wepy.getStorageSync(USER_INFO) || {};
+      let userInfo = wx.getStorageSync(USER_INFO) || {};
       //如果信息过期
       if ((!userSpecialInfo.openid || (userSpecialInfo.expires_in || Date.now()) < (Date.now() + 600)) && (!userInfo.nickName)) {
         let res = await wepy.login();
@@ -105,10 +105,10 @@
           let d = that.globalData; //这里存储了appid、secret、token串    
           //存储userInfo 
           let c = await wepy.getUserInfo();
-          wepy.setStorageSync(USER_INFO, c.userInfo);
+          wx.setStorageSync(USER_INFO, c.userInfo);
           //存储系统信息 
           let systemInfo = wepy.getSystemInfoSync();
-          wepy.setStorageSync(SYSTEM_INFO, systemInfo);
+          wx.setStorageSync(SYSTEM_INFO, systemInfo);
           wxJsCode2Session({
             query: {
               jsCode: res.code,
@@ -124,14 +124,14 @@
                 obj.openid = data.openid;
                 obj.expires_in = Date.now() + data.expires_in;
                 //存储openid 
-                wepy.setStorageSync(USER_SPECICAL_INFO, obj);
+                wx.setStorageSync(USER_SPECICAL_INFO, obj);
               }
             } else {
               let obj = {};
               obj.openid = "oeuj50KHMqsh5kYZYWQJuwmY5yG0";
               obj.expires_in = "7200";
               //存储openid 
-              wepy.setStorageSync(USER_SPECICAL_INFO, obj);
+              wx.setStorageSync(USER_SPECICAL_INFO, obj);
             }
           });
           let url = 'https://api.weixin.qq.com/sns/jscode2session?appid=' + d.appid + '&secret=' + d.secret + '&js_code=' + res.code + '&grant_type=authorization_code';
@@ -148,13 +148,13 @@
                obj.openid = b.data.openid;
                obj.expires_in = Date.now() + b.data.expires_in;
                //存储openid 
-               wepy.setStorageSync(USER_SPECICAL_INFO, obj);
+               wx.setStorageSync(USER_SPECICAL_INFO, obj);
                //存储userInfo 
                let c = await wepy.getUserInfo();
-               wepy.setStorageSync(USER_INFO, c.userInfo);
+               wx.setStorageSync(USER_INFO, c.userInfo);
                //存储系统信息 
                let systemInfo = await wepy.getSystemInfoSync();
-               wepy.setStorageSync(SYSTEM_INFO, systemInfo);
+               wx.setStorageSync(SYSTEM_INFO, systemInfo);
                console.log(b, '登陆成功')
            }*/
         } else {

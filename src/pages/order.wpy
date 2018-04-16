@@ -62,7 +62,7 @@
       let that = this;
       console.log("orderStatus值");
       console.log("orderStatus值" + that.orderStatus);
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.getMyOrderList({
         query: {
@@ -103,7 +103,7 @@
     async getMyOrderSize() {
       console.log("订单数量统计");
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.getMyOrderSize({
         query: {
@@ -136,7 +136,7 @@
       that.currentTab = opts.type;
       that.getMyOrder();
       //设置滚动高度
-      let systemInfo = wepy.getStorageSync(SYSTEM_INFO);
+      let systemInfo = wx.getStorageSync(SYSTEM_INFO);
       that.winHeight = systemInfo.windowHeight;
       that.$apply();
     }

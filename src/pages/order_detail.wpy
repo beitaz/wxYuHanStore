@@ -96,7 +96,7 @@
     }
     async getOrderInfo(currentPage, size) {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       const json = await api.getOrderInfo({
         query: {
           orderNo: this.orderNo
@@ -117,7 +117,7 @@
     }
     async editOrderInfo(orderNo, flag) {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       const json = await api.editOrderInfo({
         query: {
           orderNo: orderNo,
@@ -141,7 +141,7 @@
     async getOrderExpressInfo() {
       console.log("orderNo")
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       const json = await api.orderExpressInfo({
         query: {
           orderNo: this.orderNo
@@ -193,7 +193,7 @@
       },
       async payMoney(e) {
         let tradeNo = e.currentTarget.dataset.tradeno;
-        let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+        let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
         let openId = userSpecialInfo.openid;
         const pay = await api.toPay({
           query: {

@@ -55,7 +55,7 @@
     async getUserBrowse(currentPage, size) {
       // console.log("足迹");
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       console.log("==========调用aip=======");
       const json = await api.browseInfo({
@@ -79,7 +79,7 @@
     }
     async getUserFavorite(currentPage, size) {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.favoriteInfo({
         query: {
@@ -118,7 +118,7 @@
       //动态设置标题
       that.setTitle(opts.type);
       //设置滚动高度
-      let systemInfo = wepy.getStorageSync(SYSTEM_INFO);
+      let systemInfo = wx.getStorageSync(SYSTEM_INFO);
       that.winHeight = systemInfo.windowHeight;
       that.$apply();
     }

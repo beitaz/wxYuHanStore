@@ -104,7 +104,7 @@
         console.log("changecate....");
         let code = e.currentTarget.dataset.code;
         this.getChildCate(code);
-        wepy.setStorageSync(SEL_CLASS_CODE, code);
+        wx.setStorageSync(SEL_CLASS_CODE, code);
         //设置一级分类的选中状态
         for (var i = 0; i < this.rootcateList.length; i++) {
           var rootCate = this.rootcateList[i];

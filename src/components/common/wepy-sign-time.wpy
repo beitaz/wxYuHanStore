@@ -32,7 +32,7 @@
     async getSignDate() {
       console.log("getSignDate");
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.getSignDate({
         query: {

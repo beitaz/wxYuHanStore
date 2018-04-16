@@ -91,7 +91,7 @@
     }
     async getUserInfo(phone, code) {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.getUserInfo({
         query: {
@@ -112,7 +112,7 @@
     }
     onLoad() {
       let that = this;
-      let userInfo = wepy.getStorageSync(USER_INFO);
+      let userInfo = wx.getStorageSync(USER_INFO);
       that.avatarUrl = userInfo.avatarUrl;
       that.nickName = userInfo.nickName;
     }

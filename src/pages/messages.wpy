@@ -62,7 +62,7 @@
     }
     async getUserMessage(currentPage, size) {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.messageInfo({
         query: {
@@ -88,7 +88,7 @@
       let that = this;
       this.list = [];
       //设置滚动高度
-      let systemInfo = wepy.getStorageSync(SYSTEM_INFO);
+      let systemInfo = wx.getStorageSync(SYSTEM_INFO);
       that.winHeight = systemInfo.windowHeight;
       that.getUserMessage();
     }

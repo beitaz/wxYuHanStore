@@ -70,7 +70,7 @@
     async editOrderInfo(orderNo, flag) {
       console.log("调用方法");
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       const json = await api.editOrderInfo({
         query: {
           orderNo: orderNo,
@@ -107,7 +107,7 @@
       async payMoney(e) {
         this.orderNo = e.currentTarget.dataset.id;
         let tradeNo = e.currentTarget.dataset.tradeno;
-        let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+        let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
         let openId = userSpecialInfo.openid;
         const pay = await api.toPay({
           query: {

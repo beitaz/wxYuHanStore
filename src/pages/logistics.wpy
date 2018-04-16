@@ -62,7 +62,7 @@
     async getOrderExpressInfo() {
       console.log("order88No")
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       const json = await api.orderExpressInfo({
         query: {
           orderNo: this.orderNo

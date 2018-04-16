@@ -16,7 +16,6 @@ const grabDiscovers = (params) => wxRequest(params, apiHost + '/api/discovers');
 const grabGoodsDetail = (params) => wxRequest(params, apiHost + '/api/goods');
 
 
-
 // 获取发现好商品接口 (已废弃)
 // const getDiscoverList = (params) => wxRequest(params, apiMall + '/goods/list?cateidOne=1&cateidTwo=0&price=0&sales=2');
 

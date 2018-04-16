@@ -52,7 +52,7 @@
     //商品取消收藏
     async goodsUnFavorite(goodsId) {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.goodsUnFavorite({
         query: {
@@ -80,7 +80,7 @@
     //商品取消收藏
     async delUserBrowser(goodsId) {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.delUserBrowser({
         query: {

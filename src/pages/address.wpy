@@ -36,7 +36,7 @@
     }
     async getUserAddress(phone, code) {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.getUserAddress({
         query: {
@@ -53,7 +53,7 @@
     }
     async receiverInf(id) {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       const json = await api.receiverInfoById({
         query: {
           id: id

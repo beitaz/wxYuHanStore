@@ -120,7 +120,7 @@
     //获取订单详情
     async getOrderDetailInfo() {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.preOrder({
         query: {
@@ -147,7 +147,7 @@
       that.$apply();
     }
     async getAddressInfo(id) {
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       const json = await api.receiverInfoById({
         query: {
           id: id
@@ -178,7 +178,7 @@
       that.getOrderDetailInfo();
       let from = option.from == undefined ? "" : option.from;
       if (from == "selAdd") {
-        this.getAddressInfo(wepy.getStorageSync(ADDRESS_ID))
+        this.getAddressInfo(wx.getStorageSync(ADDRESS_ID))
       }
     }
     computed = {
@@ -186,7 +186,7 @@
     async goToPay(formId) {
       //测试调用接口用，可注释
       tip.loading("提交订单中");
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.saveByCart({
         query: {
@@ -261,7 +261,7 @@
       }
     }
     async reduceGoodNum(id, num, index) {
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.cartUpdateNum({
         query: {
@@ -282,7 +282,7 @@
       this.$apply();
     }
     async addGoodNum(id, num, index) {
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.cartUpdateNum({
         query: {
@@ -304,7 +304,7 @@
     }
     async deleteGoods(itemData) {
       var id = itemData.id;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+      let userSpecialInfo = wx.getStorageSync(USER_SPECICAL_INFO) || {};
       let openId = userSpecialInfo.openid;
       const json = await api.cartDel({
         query: {
