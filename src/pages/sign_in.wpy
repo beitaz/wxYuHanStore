@@ -108,14 +108,11 @@
         that.conDays = that.conDays + 1;
         that.siging = false;
         this.getUserSign();
+        // 调用子组件 wepySignTime.refreshList("") 刷新签到记录
         this.$invoke("wepySignTime", "refreshList", "");
         that.$apply();
       } else {
-        wepy.showToast({
-          title: json.data.msg || '',
-          images: '../images/error.png',
-          duration: 1000
-        })
+        tip.error(json.data.msg, 1000);
       }
     }
     onLoad() {

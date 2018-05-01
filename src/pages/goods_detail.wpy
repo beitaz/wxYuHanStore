@@ -161,6 +161,7 @@
 <script>
   import wepy from 'wepy'
   import {
+    ISDEV,
     SYSTEM_INFO,
     USER_SPECICAL_INFO
   } from '../utils/constant';
@@ -286,11 +287,13 @@
       if (json.data.code == 0) {
         let data = json.data.data;
         that.detail = data;
-        // 原始数据发送到远程服务器
-        api.grabGoodsDetail({
-          method: 'POST',
-          query: that.detail
-        });
+        if (ISDEV) {
+          // 原始数据发送到远程服务器
+          api.grabGoodsDetail({
+            method: 'POST',
+            query: that.detail
+          });
+        }
         console.log('getGoodsDetail %O', json);
         WxParse.wxParse('detailInfo', 'html', that.detail.detailInfo, this);
         // time.endTime = that.detail.validEndTime;

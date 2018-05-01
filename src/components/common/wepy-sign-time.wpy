@@ -25,10 +25,6 @@
     data = {
       list: [],
       aways: 0
-      // arry : {
-      //   days: [],
-      //   aways: 0
-      // }
     }
     async getSignDate() {
       let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
@@ -50,16 +46,9 @@
     }
     onLoad() {
       this.getSignDate();
-      // let arry = {
-      //   days: [],
-      //   aways: 0
-      // }
-      // this.list = arry;
-      // console.log(this.arry)
-      // this.list = this.arry.days;
-      // this.aways = this.arry.aways;
     }
     methods = {
+      // 父组件调用此方法刷新签到列表
       refreshList(val) {
         if (val == undefined) return;
         console.log("val.....", val);

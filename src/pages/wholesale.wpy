@@ -44,7 +44,7 @@
     async getGoodList(currentPage, size) {
       let that = this;
       //const json = await api.getGoodsList({
-      const json = await api.hostGoodsList({
+      const json = await api.getRecommends({
         query: {
           page: currentPage || 1,
           size: size || 10,

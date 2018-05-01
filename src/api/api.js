@@ -1,4 +1,7 @@
 import {
+  ISDEV
+} from '../utils/constant';
+import {
   wxRequest
 } from '../utils/wxRequest';
 
@@ -13,19 +16,27 @@ const apiHost = 'http://localhost:3000'
  */
 const grabAdverts = (params) => wxRequest(params, apiHost + '/api/adverts');
 const grabDiscovers = (params) => wxRequest(params, apiHost + '/api/discovers');
-const grabGoodsDetail = (params) => wxRequest(params, apiHost + '/api/goods');
-
+const grabGoodsDetail = (params) => wxRequest(params, apiHost + '/api/detail');
+let wxJsCode2Session, getAdList, getDisvcoers, getRecommends;
+if (ISDEV) {
+  wxJsCode2Session = (params) => wxRequest(params, apiHost + "/api/login");  // 微信的jscode换取sessionKey
+  getAdList = (params) => wxRequest(params, apiHost + '/api/adverts');
+  getDisvcoers = (params) => wxRequest(params, apiHost + '/api/discovers');  // 获取 "发现好商品" 数据
+  getRecommends = (params) => wxRequest(params, apiHost + '/api/recommends');  // 获取 "商品推荐" 数据
+} else {
+  wxJsCode2Session = (params) => wxRequest(params, apiMall + "/api/wechat/jscode2session");  // 微信的jscode换取sessionKey
+  getAdList = (params) => wxRequest(params, apiMall + '/api/adverts/list');
+  getDisvcoers = (params) => wxRequest(params, apiMall + '/api/mall/discoverList');  // 获取 "发现好商品" 数据
+  getRecommends = (params) => wxRequest(params, apiMall + '/api/home/hostGoodsList');  // 获取 "商品推荐" 数据
+}
 
 // 获取发现好商品接口 (已废弃)
 // const getDiscoverList = (params) => wxRequest(params, apiMall + '/goods/list?cateidOne=1&cateidTwo=0&price=0&sales=2');
 
-//微信的jscode换取sessionKey
-const wxJsCode2Session = (params) => wxRequest(params, apiMall + "/api/wechat/jscode2session");
-
 //商品接口---begin
 //首页发现商品接口
-const hostGoodsList = (params) => wxRequest(params, apiMall + '/api/home/hostGoodsList');
-const getHomeDisvocerList = (params) => wxRequest(params, apiMall + '/api/mall/discoverList');
+// const getRecommends = (params) => wxRequest(params, apiMall + '/api/home/hostGoodsList');
+
 //查询商品列表
 const getGoodsList = (params) => wxRequest(params, apiMall + '/api/mall/searchGoodsList');
 
@@ -147,11 +158,11 @@ const childGoodsCatetoryList = (params) => wxRequest(params, apiMall + '/api/mal
 //商品分类--end
 
 //查询广告列表
-const getAdList = (params) => wxRequest(params, apiMall + '/api/adverts/list');
+// const getAdList = (params) => wxRequest(params, apiMall + '/api/adverts/list');
 
 module.exports = {
-  hostGoodsList,
-  getHomeDisvocerList,
+  getRecommends,
+  getDisvcoers,
   getGoodsList,
   goodsDetail,
   wxJsCode2Session,

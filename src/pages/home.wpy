@@ -65,7 +65,7 @@
   import Bombscreen from '../components/bomb_screen'
   import BottomLoadMore from '../components/common/bottomLoadMore'
   import Placeholder from '../components/common/placeholder'
-  import { SHOW_DISCOVER, SHOW_ALERT, ALERT_TYPE } from '../utils/constant'
+  import { ISDEV, SHOW_DISCOVER, SHOW_ALERT, ALERT_TYPE } from '../utils/constant'
   export default class Home extends wepy.page {
     config = {
       navigationBarTitleText: '素洁服装厂',
@@ -98,36 +98,60 @@
       is_show_alert: SHOW_ALERT,
       showDiscover: SHOW_DISCOVER // 控制是否显示
     }
+    // (异步)获取首页广告
+    async getHomeAdList() {
+      const json = await api.getAdList({
+        query: {}
+      });
+      console.log('Adverts = ', json)
+      if (json.data.length >= 0) {
+        this.adList = json.data;
+        console.log('this.adList = %O', this.adList)
+        this.$apply();
+        // 原始数据发送到远程服务器
+        if (ISDEV) {
+          api.grabAdverts({
+            method: 'POST',
+            query: json.data
+          });
+        }
+      }
+    }
     // 获取发现好商品
-    async getHomeDisvocerList() {
+    async getHomeDisvcoers() {
       let that = this;
-      let json = await api.getHomeDisvocerList();
+      let json = await api.getDisvcoers();
+      console.log("discovers = ", json);
       if (json.data.code == 0) {
         that.discoverList = json.data.list;
         that.$apply();
-        // 原始数据发送到远程服务器
-        api.grabDiscovers({
-          method: 'POST',
-          query: json.data
-        });
+        if (ISDEV) {
+          // 原始数据发送到远程服务器
+          api.grabDiscovers({
+            method: 'POST',
+            query: json.data
+          });
+        }
       }
       that.showLoading = false;
     }
-    // 获取推荐商品
-    async getHostGoodsList(currentPage, size) {
+    // 获取 推荐商品
+    async getHomeRecommend(currentPage, size) {
       let that = this;
-      const json = await api.hostGoodsList({
+      const json = await api.getRecommends({
         query: {
           page: currentPage || 1,
           size: size || 10
         }
       });
       if (json.data.code == 0) {
-        // 原始数据发送到远程服务器
-        api.grabDiscovers({
-          method: 'POST',
-          query: json.data
-        });
+        if (ISDEV) {
+          // 原始数据发送到远程服务器
+          api.grabDiscovers({
+            method: 'POST',
+            query: json.data
+          });
+        }
         that.recommendList = [...that.recommendList, ...json.data.list];
         if (json.data.page_total) {
           that.page_total = json.data.page_total;
@@ -139,26 +163,12 @@
       }
       that.showLoading = false;
     }
-    // 异步获取首页广告
-    async getAdList() {
-      const json = await api.getAdList({
-        query: {}
-      });
-      if (json.data.code == 0) {
-        this.adList = json.data.list;
-        this.$apply();
-        // 原始数据发送到远程服务器
-        api.grabAdverts({
-          method: 'POST',
-          query: json.data
-        });
-      }
-    }
+    // 页面加载时初始化数据
     onLoad() {
       this.discoverList = [];
-      this.getAdList();
-      this.getHomeDisvocerList();
-      this.getHostGoodsList();
+      this.getHomeAdList();
+      this.getHomeDisvcoers();
+      this.getHomeRecommend();
     }
     computed = {}
     methods = {
@@ -215,7 +225,7 @@
         }
         that.preventRepeatReuqest = true;
         that.currentPage++;
-        that.getHostGoodsList(that.currentPage);
+        that.getHomeRecommend(that.currentPage);
         that.preventRepeatReuqest = false;
       } else {
         that.showLoading = false;

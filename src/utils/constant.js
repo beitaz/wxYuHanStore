@@ -30,10 +30,16 @@ export const SEL_CLASS_CODE = "selClassCode";
 
 
 /**
+ * 是否将原始数据发送到本地 ( true:需要, false:不需要 )
+ * @type {Boolean}
+ */
+export const ISDEV = true;
+
+/**
  * 启动时是否显示 "发现好商品" ( true:显示, false:不显示 )
  * @type {Boolean}
  */
-export const SHOW_DISCOVER = false;
+export const SHOW_DISCOVER = true;
 
 /**
  * 启动时是否显示 "弹幕" ( true:显示, false:不显示 )

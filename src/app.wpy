@@ -98,18 +98,19 @@
       // 如果信息过期
       if ((!userSpecialInfo.openid || (userSpecialInfo.expires_in || Date.now()) < (Date.now() + 600)) && (!userInfo.nickName)) {
         let res = await wepy.login();
+        console.log('wx.login response %O', res);
         if (res.code) {
           let wxUserInfo = await wepy.getUserInfo();
           wepy.setStorageSync(USER_INFO, wxUserInfo.userInfo);  // 存储用户信息
           wepy.setStorageSync(SYSTEM_INFO, wepy.getSystemInfoSync());  // 存储系统信息 
           wxJsCode2Session({
             query: {
-              jsCode: res.code,
-              nickName: wxUserInfo.userInfo.nickName
+              js_code: res.code,
+              nick_name: wxUserInfo.userInfo.nickName
             }
           }).then(resp => {
             let rlt = resp.data;
-            console.log("wxJsCode2Session 结果: %O", rlt);
+            console.log("wxJsCode2Session 结果 resp = %O", resp);
             if (rlt.result) {
               let data = rlt.data;
               wepy.setStorageSync(USER_SPECICAL_INFO, {openid: data.openid, expires_in: Date.now() + data.expires_in});
