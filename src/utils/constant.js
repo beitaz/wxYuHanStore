@@ -54,6 +54,12 @@ export const SHOW_ALERT = false;
 export const ALERT_TYPE = 0;
 
 /**
+ * 开发环境的 openId 字符串
+ * @type {String}
+ */
+export const API_SECRET_KEY = 'www.mall.cycle.com';
+
+/**
  * 测试服务器 openid
  * @type {String}
  */

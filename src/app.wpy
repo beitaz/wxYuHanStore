@@ -1,7 +1,8 @@
 
 <script>
   import wepy from 'wepy';
-  import 'wepy-async-function'
+  import tip from './utils/tip';
+  import 'wepy-async-function';
   import {
     USER_SPECICAL_INFO,
     USER_INFO,
@@ -83,7 +84,9 @@
       }
     }
     globalData = {
-      userInfo: null
+      userInfo: undefined,
+      userSpecialInfo: undefined,
+      systemInfo: undefined
     }
     constructor() {
       super()
@@ -91,35 +94,26 @@
       this.use('promisify');
     }
     async onLaunch() {
-      // 用户信息
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      // 用户普通信息
-      let userInfo = wepy.getStorageSync(USER_INFO) || {};
-      // 如果信息过期
-      if ((!userSpecialInfo.openid || (userSpecialInfo.expires_in || Date.now()) < (Date.now() + 600)) && (!userInfo.nickName)) {
+      // let app = getApp();    // App() 内使用 this 就可以拿到 app 实例
+      let specical = this.globalData.userSpecialInfo;    // 用户特殊信息
+      if (specical === undefined) {     // 信息无效(无过期时间)
         let res = await wepy.login();
-        console.log('wx.login response %O', res);
         if (res.code) {
           let wxUserInfo = await wepy.getUserInfo();
-          wepy.setStorageSync(USER_INFO, wxUserInfo.userInfo);  // 存储用户信息
-          wepy.setStorageSync(SYSTEM_INFO, wepy.getSystemInfoSync());  // 存储系统信息 
+          this.globalData.userInfo = wxUserInfo.userInfo;   // 存储用户信息
+          this.globalData.systemInfo = wepy.getSystemInfoSync();    // 存储系统信息
           wxJsCode2Session({
             query: {
               js_code: res.code,
               nick_name: wxUserInfo.userInfo.nickName
             }
           }).then(resp => {
-            let rlt = resp.data;
             console.log("wxJsCode2Session 结果 resp = %O", resp);
-            if (rlt.result) {
-              let data = rlt.data;
-              wepy.setStorageSync(USER_SPECICAL_INFO, {openid: data.openid, expires_in: Date.now() + data.expires_in});
-            } else {
-              wepy.setStorageSync(USER_SPECICAL_INFO, {openid: OPENID, expires_in: '7200'});
-            }
+            let data = resp.data;
+            this.globalData.userSpecialInfo = { openid: data ? data.openid : OPENID };  // 存储用户特殊信息 
           });
         } else {
-          console.log('获取用户登录态失败！' + res.errMsg)
+          tip.error('获取用户登录态失败！' + res.errMsg);
         }
       }
     }

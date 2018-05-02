@@ -8,9 +8,9 @@ const wxRequest = async(params = {}, url) => {
     tip.loading();
     let query = params.query || {};
     let timestamp = util.getCurrentTime();
-    query.sign = md5.hex_md5((timestamp + query.openId + API_SECRET_KEY).toLowerCase());
+    query.sign = md5.hex_md5((timestamp + API_SECRET_KEY).toLowerCase());
     query.time = timestamp;
-    console.log('Request params.query = ', query);
+    console.log('%s 请求参数为: %O', query.method || 'GET', query);
     let res = await wepy.request({
         url: url,
         method: params.method || 'GET',

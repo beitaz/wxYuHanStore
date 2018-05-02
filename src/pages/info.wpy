@@ -7,7 +7,7 @@
       </view>
     </view>
     <view class="info_block">
-      <navigator class="item" url="/pages/register" wx:if="{{bShowBind}}">
+      <navigator class="item" url="/pages/register" wx:if="{{showBind}}">
         <view>
           <view class="item_content">
             <image class="item_img" src="../images/icon_my_01.png" />
@@ -88,30 +88,31 @@
     data = {
       avatarUrl: "",
       nickName: "",
-      bShowBind: false
+      showBind: false
     }
     async getUserInfo(phone, code) {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      let openId = userSpecialInfo.openid;
+      console.log('GlobalData = ', this.$parent.globalData);
+      let openid = this.$parent.globalData.userSpecialInfo.openid;
       const json = await api.getUserInfo({
         query: {
-          openId: openId
+          openid: openid
         }
       });
-      if (json.data.code == 0) {
-        let user = json.data.user;
-        console.log(user ? user : '未找到用户信息');
-        user ? (this.bShowBind = !(user.mobile.length > 0)) : tip.error('未找到用户信息', 1000)
+      console.log('getUserInfo = ', json);
+      let user = json.data;
+      if (user) {
+        this.showBind = !(user.mobile.length > 0)
         that.$apply();
       } else {
-        tip.error(json.data.msg)
+        tip.error('未找到用户信息', 1000)
       }
       that.showLoading = false;
     }
     onLoad() {
       let that = this;
-      let userInfo = wepy.getStorageSync(USER_INFO);
+      // let userInfo = wepy.getStorageSync(USER_INFO);
+      let userInfo = this.$parent.globalData.userInfo;
       that.avatarUrl = userInfo.avatarUrl;
       that.nickName = userInfo.nickName;
     }
