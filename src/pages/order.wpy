@@ -1,21 +1,22 @@
 <template>
   <view>
-    <!--tab模块-->
+    <!-- tab模块 -->
     <view class="swiper-tab-pd">
       <tab @currentTab.user="getCurrentTab" :tabList.sync="tabList" :currentTab.sync="currentTab"></tab>
     </view>
     <scroll-view scroll-y="true" class="swiper-item-box" style="height:{{winHeight - 31}}px" bindscrolltolower="onReachBottom">
-      <orderItem :orderList.sync="orderList"></orderItem>
-      <!--加载更多时动画-->
+      <orderItem :orders.sync="orders"></orderItem>
+      <!-- 加载更多时动画 -->
       <bottomLoadMore :show.sync="showLoading" message="正在加载"></bottomLoadMore>
-      <!--暂无数据显示-->
-      <placeholder :show.sync="is_empty" message="暂无发现数据"></placeholder>
+      <!-- 暂无数据显示 -->
+      <placeholder :show.sync="is_empty" message="暂无订单数据"></placeholder>
     </scroll-view>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy';
+  import tip from '../utils/tip';
   import Tab from '../components/tab'
   import {
     SYSTEM_INFO,
@@ -39,137 +40,152 @@
       winHeight: 0,
       totalCount: 0,
       tabList: ["全部订单", "待支付", "待收货", "已完成"],
-      orderList: [],
+      orders: [],
       currentPage: 1,
       is_empty: false,
-      orderStatus: "",
+      orderStatus: 0,
       currentTab: 0,
       flag: 0,
-      //是否显示 底部loading
-      showLoading: true,
-      //防止重复加载
-      preventRepeatReuqest: false,
-      //待付款
-      pendingPayCount: 0,
-      //待发货
-      backrdersCount: 0,
-      //待收货
-      shippedCount: 0,
+      showLoading: true,  // 是否显示底部 loading
+      preventRepeatReuqest: false,  // 防止重复加载
+      pendingPayCount: 0,  // 待付款
+      backrdersCount: 0,  // 待发货
+      shippedCount: 0,  // 待收货
       receiveFlg: 0
     }
     async getMyOrder(currentPage, size, refresh) {
-      console.log("refresh值：" + refresh);
+      console.log("refresh 值: %s, orderStatus 值: %s", refresh, this.orderStatus);
       let that = this;
-      console.log("orderStatus值");
-      console.log("orderStatus值" + that.orderStatus);
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      let openId = userSpecialInfo.openid;
+      let openid = this.$parent.globalData.userSpecialInfo.openid;
       const json = await api.getMyOrderList({
         query: {
-          openId: openId,
-          orderStatus: that.orderStatus,
-          receiveFlg: that.receiveFlg,
+          openid: openid,
+          order_status: that.orderStatus,
+          receive_flag: that.receiveFlg,
           page: currentPage || 1,
           size: size || 10,
-          type: 1 //正常单
+          type: 1  // 正常单
         }
       });
+      console.log('我的所有订单: ', json.data);
       if (json.data.code == 0) {
-        console.log("json.data.list");
-        console.log(json.data.list);
-        if (refresh) {
-          that.orderList = json.data.list;
-        } else {
-          that.orderList = [...that.orderList, ...json.data.list];
-        }
+        that.orders = refresh ? json.data.list : [...that.orders, ...json.data.list];
         that.page_total = json.data.page_total;
-        that.totalCount = json.data.totalCount;
-        console.log("条目数：" + that.totalCount);
-        if (json.data.page_total == 0) {
-          //暂无数据
-          that.is_empty = true;
-        } else {
-          that.is_empty = false;
-        }
-        that.getMyOrderSize();
-        console.log("list返回数据");
-        console.log(that.orderList);
+        that.total_count = json.data.total_count;
+        that.is_empty = that.total_count == 0  // 暂无数据
+        that.getMyOrderSize(that.orders);
       } else {
         tip.error(json.data.msg)
       }
       that.showLoading = false;
       that.$apply();
     }
-    async getMyOrderSize() {
+    async getMyOrderSize(orders) {
       console.log("订单数量统计");
-      let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      let openId = userSpecialInfo.openid;
-      const json = await api.getMyOrderSize({
-        query: {
-          openId: openId
+      let pendingPayCount, backrdersCount, shippedCount = 0;
+      orders.forEach(order => {
+        switch (order.receive) {
+          case 1:
+            pendingPayCount++;  // 待付款
+            break;
+          case 2:
+            backrdersCount++;   // 待发货
+            break;
+          case 3:
+            shippedCount++;     // 待收货
+            break;
+          default:
+            break;
         }
       });
-      if (json.data.code == 0) {
-        //待付款
-        that.pendingPayCount = json.data.pendingPayCount;
-        //待发货
-        that.backrdersCount = json.data.backrdersCount;
-        //待收货
-        that.shippedCount = json.data.shippedCount;
-        //重写list
-        var dotList = ["全部订单", {
-          name: "待支付",
-          dotNum: that.pendingPayCount
-        }, {
-          name: "待收货",
-          dotNum: that.backrdersCount
-        }, "已完成"];
-        this.$invoke("tab", "changeList", dotList);
-        that.$apply();
-      }
+      var dotList = ["全部订单", {
+        name: "待支付",
+        dotNum: this.pendingPayCount = pendingPayCount
+      }, {
+        name: "待收货",
+        dotNum: this.backrdersCount = backrdersCount
+      }, "已完成"];
+      this.$invoke("tab", "changeList", dotList);
+      this.$apply();
+      // let that = this;
+      // let openId = this.$parent.globalData.userSpecialInfo.openid;
+      // const json = await api.getMyOrderSize({
+      //   query: {
+      //     openId: openId
+      //   }
+      // });
+      // if (json.data.code == 0) {
+      //   that.pendingPayCount = json.data.pendingPayCount;  // 待付款
+      //   that.backrdersCount = json.data.backrdersCount;  // 待发货
+      //   that.shippedCount = json.data.shippedCount;  // 待收货
+      //   // 重写 list
+      //   var dotList = ["全部订单", {
+      //     name: "待支付",
+      //     dotNum: that.pendingPayCount
+      //   }, {
+      //     name: "待收货",
+      //     dotNum: that.backrdersCount
+      //   }, "已完成"];
+      //   this.$invoke("tab", "changeList", dotList);
+      //   that.$apply();
+      // }
     }
-    onLoad(opts) {
-      let that = this;
-      let title = "";
-      that.orderList = [];
-      that.currentTab = opts.type;
-      that.getMyOrder();
-      //设置滚动高度
-      let systemInfo = wepy.getStorageSync(SYSTEM_INFO);
-      that.winHeight = systemInfo.windowHeight;
-      that.$apply();
+    onLoad(options) {
+      this.orders = [];  // 重置订单列表
+      this.currentTab = options.type;  // 设置页面加载时激活的 tab
+      this.getMyOrder();  // 获取我的订单
+      this.winHeight = this.$parent.globalData.systemInfo.windowHeight;  // 设置滚动高度
+      this.$apply();
     }
-    computed = {
-    }
+    computed = {}
     methods = {
-      getCurrentTab(cur, evt) {
+      getCurrentTab(current, event) {
         this.currentPage = 1;
         this.page_total = 0;
-        this.orderList = [];
+        this.orders = [];
         let that = this;
-        that.currentTab = cur;
-        console.log("cur");
-        console.log(cur);
-        if (cur == 0) {
+        that.currentTab = current;
+        console.log('current: ', current);
+        if (current == 0) {
           console.log("所有订单类型");
           that.orderStatus = "";
-          that.getMyOrder();
-        } else if (cur == 1) {
+
+        } else if (current == 1) {
           console.log("未付款订单类型");
           that.orderStatus = 0;
-          that.getMyOrder();
-        } else if (cur == 2) {
+
+        } else if (current == 2) {
           console.log("待收货订单类型");
           that.orderStatus = 2;
           that.receiveFlg = 2;
-          that.getMyOrder();
-        } else if (cur == 3) {
+
+        } else if (current == 3) {
           console.log("已完成订单类型");
           that.orderStatus = 4;
           that.receiveFlg = 4;
-          that.getMyOrder();
+
         }
+        that.orderStatus = current;
+        that.getMyOrder();
+
+        // switch (this.currentTab) {
+        //   case 1:
+        //     console.log("未付款订单类型");
+        //     that.orderStatus = 0;
+        //     break;
+        //   case 2:
+        //     console.log("待发货订单类型");
+        //     that.orderStatus = 2;
+        //     that.receiveFlg = 2;
+        //     break;
+        //   case 3:
+        //     console.log("已完成订单类型");
+        //     that.orderStatus = 4;
+        //     break;
+        //   default:
+        //     console.log("所有订单类型");
+        //     break;
+        // }
         that.$apply();
       },
       /**

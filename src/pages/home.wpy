@@ -97,15 +97,12 @@
       is_show_alert: SHOW_ALERT,
       showDiscover: SHOW_DISCOVER // 控制是否显示
     }
-    // (异步)获取首页广告
+    // 获取首页广告
     async getHomeAdList() {
-      const json = await api.getAdList({
-        query: {}
-      });
-      console.log('Adverts = ', json)
+      let json = await api.getAdList();
+      console.log('获取首页广告 adverts: ', json)
       if (json.data.length >= 0) {
         this.adList = json.data;
-        console.log('this.adList = %O', this.adList)
         this.$apply();
         // 原始数据发送到远程服务器
         if (ISDEV) {
@@ -117,13 +114,12 @@
       }
     }
     // 获取发现好商品
-    async getHomeDisvcoers() {
-      let that = this;
-      let json = await api.getDisvcoers();
-      console.log("discovers = ", json);
+    async getHomeDiscovers() {
+      let json = await api.getDiscovers();
+      console.log('获取好商品 discovers: ', json);
       if (json.data.code == 0) {
-        that.discoverList = json.data.list;
-        that.$apply();
+        this.discoverList = json.data.list;
+        this.$apply();
         if (ISDEV) {
           // 原始数据发送到远程服务器
           api.grabDiscovers({
@@ -132,9 +128,9 @@
           });
         }
       }
-      that.showLoading = false;
+      this.showLoading = false;
     }
-    // 获取 推荐商品
+    // 获取推荐商品
     async getHomeRecommend(currentPage, size) {
       let that = this;
       const json = await api.getRecommends({
@@ -143,10 +139,11 @@
           size: size || 10
         }
       });
+      console.log('获取推荐商品 recommends: ', json);
       if (json.data.code == 0) {
         if (ISDEV) {
           // 原始数据发送到远程服务器
-          api.grabDiscovers({
+          api.grabRecommends({
             method: 'POST',
             query: json.data
           });
@@ -166,7 +163,7 @@
     onLoad() {
       this.discoverList = [];
       this.getHomeAdList();
-      this.getHomeDisvcoers();
+      this.getHomeDiscovers();
       this.getHomeRecommend();
     }
     computed = {}

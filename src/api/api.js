@@ -16,12 +16,13 @@ const localhost = 'http://localhost:3000'
  */
 const grabAdverts = (params) => wxRequest(params, localhost + '/api/adverts');
 const grabDiscovers = (params) => wxRequest(params, localhost + '/api/discovers');
+const grabRecommends = (params) => wxRequest(params, localhost + '/api/recommends');
 const grabGoodsDetail = (params) => wxRequest(params, localhost + '/api/detail');
 
 const apiMall = ISDEV ? localhost : sujiefs
 const wxJsCode2Session = (params) => wxRequest(params, apiMall + "/api/wechat/jscode2session");  // 微信的jscode换取sessionKey
 const getAdList = (params) => wxRequest(params, apiMall + '/api/adverts/list');
-const getDisvcoers = (params) => wxRequest(params, apiMall + '/api/mall/discoverList');  // 获取 "发现好商品" 数据
+const getDiscovers = (params) => wxRequest(params, apiMall + '/api/mall/discoverList');  // 获取 "发现好商品" 数据
 const getRecommends = (params) => wxRequest(params, apiMall + '/api/home/hostGoodsList');  // 获取 "商品推荐" 数据
 
 // 获取发现好商品接口 (已废弃)
@@ -156,7 +157,7 @@ const childGoodsCatetoryList = (params) => wxRequest(params, apiMall + '/api/mal
 
 module.exports = {
   getRecommends,
-  getDisvcoers,
+  getDiscovers,
   getGoodsList,
   goodsDetail,
   wxJsCode2Session,
@@ -189,5 +190,6 @@ module.exports = {
   getSignDate,
   grabAdverts,
   grabDiscovers,
+  grabRecommends,
   grabGoodsDetail
 }

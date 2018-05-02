@@ -92,14 +92,12 @@
     }
     async getUserInfo(phone, code) {
       let that = this;
-      console.log('GlobalData = ', this.$parent.globalData);
       let openid = this.$parent.globalData.userSpecialInfo.openid;
       const json = await api.getUserInfo({
         query: {
           openid: openid
         }
       });
-      console.log('getUserInfo = ', json);
       let user = json.data;
       if (user) {
         this.showBind = !(user.mobile.length > 0)
