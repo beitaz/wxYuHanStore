@@ -25,11 +25,13 @@ const getAdverts = (params) => wxRequest(params, apiMall + '/api/adverts/list');
 const getDiscovers = (params) => wxRequest(params, apiMall + '/api/mall/discoverList');  // 发现好商品
 const getRecommends = (params) => wxRequest(params, apiMall + '/api/home/hostGoodsList');  // 商品推荐
 const goodsDetail = (params) => wxRequest(params, apiMall + '/api/mall/goods');  // 商品详情
+const favoriteInfo = (params) => wxRequest(params, apiMall + '/api/userCenter/favorites');  // 所有收藏
 const goodsIsFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/goodsIsFavorite');  // 是否收藏
 const goodsFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/add');  // 添加收藏
 const goodsUnFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/delete'); // 取消收藏
-const addBrowser = (params) => wxRequest(params, apiMall + '/api/userBrowse/add');  // 添加用户足迹
-const favoriteInfo = (params) => wxRequest(params, apiMall + '/api/userCenter/favorites');  // 所有收藏
+const browseInfo = (params) => wxRequest(params, apiMall + '/api/userBrowse/browseInfo');  // 所有足迹
+const addBrowser = (params) => wxRequest(params, apiMall + '/api/userBrowse/add');  // 添加足迹
+const delUserBrowser = (params) => wxRequest(params, apiMall + '/api/userBrowse/delete');  // 删除足迹
 
 // 获取发现好商品接口 (已废弃)
 // const getDiscoverList = (params) => wxRequest(params, apiMall + '/goods/list?cateidOne=1&cateidTwo=0&price=0&sales=2');
@@ -78,11 +80,6 @@ const getSignDate = (params) => wxRequest(params, apiMall + '/api/userSign/getSi
 
 //用户积分信息
 const pointInfo = (params) => wxRequest(params, apiMall + '/api/userPoint/pointInfo');
-
-//用户足迹信息
-const browseInfo = (params) => wxRequest(params, apiMall + '/api/userBrowse/browseInfo');
-//删除用户足迹
-const delUserBrowser = (params) => wxRequest(params, apiMall + '/api/userBrowse/delete');
 
 //用户消息
 const messageInfo = (params) => wxRequest(params, apiMall + '/api/systemMessage/messageInfo');

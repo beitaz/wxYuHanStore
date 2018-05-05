@@ -101,21 +101,18 @@
       let user = json.data;
       if (user) {
         this.showBind = !user.mobile;
-        that.$apply();
       } else {
         tip.error('未找到用户信息', 1000)
       }
       that.showLoading = false;
+      that.$apply();
     }
     onLoad() {
-      let that = this;
-      // let userInfo = wepy.getStorageSync(USER_INFO);
       let userInfo = this.$parent.globalData.userInfo;
-      that.avatarUrl = userInfo.avatarUrl;
-      that.nickName = userInfo.nickName;
+      this.avatarUrl = userInfo.avatarUrl;
+      this.nickName = userInfo.nickName;
     }
     onShow() {
-      let that = this;
       this.getUserInfo();
     }
     computed = {}

@@ -48,29 +48,27 @@
       showLoading: true,  // 是否显示底部loading
       preventRepeatReuqest: false  // 防止重复加载
     }
+    // 我的足迹
     async getUserBrowse(currentPage, size) {
-      // console.log("足迹");
-      let that = this;
       let openId = this.$parent.globalData.userSpecialInfo.openid;
-      console.log("==========调用aip=======");
       const json = await api.browseInfo({
         query: {
-          openId: openId,
+          openid: openId,
           page: currentPage || 1,
           size: size || 10
         }
       });
       if (json.data.code == 0) {
-        that.browselist = [...that.browselist, ...json.data.list];
-        that.page_total = json.data.page_total;
-        console.log("that.browselist");
-        console.log(that.browselist);
-        that.$apply();
-        that.$invoke('collectionList', 'refreshList', that.browselist);
+        this.browselist = [...this.browselist, ...json.data.list];
+        this.page_total = json.data.page_total;
+        console.log("this.browselist");
+        console.log(this.browselist);
+        this.$apply();
+        this.$invoke('collectionList', 'refreshList', this.browselist);
       } else {
         tip.error(json.data.msg)
       }
-      that.showLoading = false;
+      this.showLoading = false;
     }
     // 我的收藏
     async getUserFavorite(currentPage, size) {
@@ -96,7 +94,6 @@
       that.showLoading = false;
     }
     onLoad(options) {
-      let this = this;
       // this.browselist = {};
       // this.favorlist = {};
       // this.list = bb.result.products;
@@ -104,7 +101,7 @@
       this.currentTab = options.type;
       console.log('初始化参数', options);
       options.type == 0 ? this.getUserBrowse() : this.getUserFavorite();
-      wepy.setNavigationBarTitle({title: this.tabList[options.type]});  // 设置标题
+      wepy.setNavigationBarTitle({ title: this.tabList[options.type] });  // 设置标题
       this.winHeight = this.$parent.globalData.systemInfo.windowHeight;  // 设置高度
       this.$apply();
     }
@@ -114,10 +111,8 @@
         this.currentPage = 1;
         this.page_total = 0;
         let that = this;
-        that.currentTab = cur;
-        wepy.setNavigationBarTitle({title: this.tabList[options.type]});  // 设置标题
-        // that.setTitle(cur)
-        console.log("cur");
+        that.currentTab = current;
+        wepy.setNavigationBarTitle({title: this.tabList[current]});  // 设置标题
         console.log('current tab:', current);
         if (current == 1) {
           that.getUserFavorite();
