@@ -58,17 +58,17 @@
           size: size || 10
         }
       });
+      console.log('获取用户足迹', json);
       if (json.data.code == 0) {
         this.browselist = [...this.browselist, ...json.data.list];
         this.page_total = json.data.page_total;
-        console.log("this.browselist");
-        console.log(this.browselist);
-        this.$apply();
+        console.log('this.browselist ', this.browselist);
+        this.showLoading = false;
         this.$invoke('collectionList', 'refreshList', this.browselist);
       } else {
         tip.error(json.data.msg)
       }
-      this.showLoading = false;
+      this.$apply();
     }
     // 我的收藏
     async getUserFavorite(currentPage, size) {
@@ -94,11 +94,7 @@
       that.showLoading = false;
     }
     onLoad(options) {
-      // this.browselist = {};
-      // this.favorlist = {};
-      // this.list = bb.result.products;
-      // options.type 0：我的足迹 ，1：我的收藏
-      this.currentTab = options.type;
+      this.currentTab = options.type;  // options.type  0：我的足迹 ，1：我的收藏
       console.log('初始化参数', options);
       options.type == 0 ? this.getUserBrowse() : this.getUserFavorite();
       wepy.setNavigationBarTitle({ title: this.tabList[options.type] });  // 设置标题
@@ -139,15 +135,15 @@
       })
     }
     events = {}
-    //加载更多
+    // 加载更多
     onReachBottom() {
       console.log("加载更多");
       let that = this;
       that.showLoading = true;
       console.log(that.page_total + "===" + that.currentPage);
-      //判断总页数是否大于翻页数
-      if ((that.page_total) > that.currentPage) {
-        //防止重复加载
+      // 判断总页数是否大于翻页数
+      if (that.page_total > that.currentPage) {
+        // 防止重复加载
         if (that.preventRepeatReuqest) {
           return true;
         }

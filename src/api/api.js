@@ -25,13 +25,16 @@ const getAdverts = (params) => wxRequest(params, apiMall + '/api/adverts/list');
 const getDiscovers = (params) => wxRequest(params, apiMall + '/api/mall/discoverList');  // 发现好商品
 const getRecommends = (params) => wxRequest(params, apiMall + '/api/home/hostGoodsList');  // 商品推荐
 const goodsDetail = (params) => wxRequest(params, apiMall + '/api/mall/goods');  // 商品详情
-const favoriteInfo = (params) => wxRequest(params, apiMall + '/api/userCenter/favorites');  // 所有收藏
+
+const registerUser = (params) => wxRequest(params, apiMall + '/api/users/register');  // 绑定手机
+const getUserInfo = (params) => wxRequest(params, apiMall + '/api/users/info');  // 用户是否绑定手机号
+const favoriteInfo = (params) => wxRequest(params, apiMall + '/api/users/favorites');  // 所有收藏
 const goodsIsFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/goodsIsFavorite');  // 是否收藏
-const goodsFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/add');  // 添加收藏
-const goodsUnFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/delete'); // 取消收藏
-const browseInfo = (params) => wxRequest(params, apiMall + '/api/userBrowse/browseInfo');  // 所有足迹
-const addBrowser = (params) => wxRequest(params, apiMall + '/api/userBrowse/add');  // 添加足迹
-const delUserBrowser = (params) => wxRequest(params, apiMall + '/api/userBrowse/delete');  // 删除足迹
+const goodsFavorite = (params) => wxRequest(params, apiMall + '/api/users/favorited');  // 添加收藏
+const goodsUnFavorite = (params) => wxRequest(params, apiMall + '/api/users/unfavorite'); // 取消收藏
+const browseInfo = (params) => wxRequest(params, apiMall + '/api/users/browses');  // 所有足迹
+const addBrowser = (params) => wxRequest(params, apiMall + '/api/users/browsed');  // 添加足迹
+const delUserBrowser = (params) => wxRequest(params, apiMall + '/api/users/unbrowse');  // 删除足迹
 
 // 获取发现好商品接口 (已废弃)
 // const getDiscoverList = (params) => wxRequest(params, apiMall + '/goods/list?cateidOne=1&cateidTwo=0&price=0&sales=2');
@@ -84,13 +87,11 @@ const pointInfo = (params) => wxRequest(params, apiMall + '/api/userPoint/pointI
 //用户消息
 const messageInfo = (params) => wxRequest(params, apiMall + '/api/systemMessage/messageInfo');
 
-//用户手机绑定
-const registerUser = (params) => wxRequest(params, apiMall + '/api/userCenter/register');
+
 //发送短信
 const sendRandCode = (params) => wxRequest(params, apiMall + '/api/sms/send');
 
-//用户是否绑定手机号
-const getUserInfo = (params) => wxRequest(params, apiMall + '/api/userCenter/getUserInfo');
+
 
 //用户收货地址
 const getUserAddress = (params) => wxRequest(params, apiMall + '/api/receiverInfo/list');

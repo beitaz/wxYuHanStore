@@ -4,7 +4,7 @@
     <repeat for="{{list}}" key="index" index="index" item="item">
       <view class="list-box">
         <swipeDelete :swipeData="item" @delItem.user="handleDelItem">
-          <navigator class="item-content" url="/pages/goods_detail?id={{item.goodsId}}">
+          <navigator class="item-content" url="/pages/goods_detail?id={{item.id}}">
             <view class="info">
               <view class="img-box">
                 <image src="{{item.thum_logo}}" class="img" />
@@ -45,7 +45,7 @@
     }
     onLoad() {}
     computed = {}
-    //商品取消收藏
+    // 商品取消收藏
     async goodsUnFavorite(goodsId) {
       let that = this;
       let openId = this.$parent.globalData.userSpecialInfo.openid;
@@ -72,8 +72,9 @@
       }
       that.$apply();
     }
-    // 取消收藏
+    // 取消浏览
     async delUserBrowser(goodsId) {
+      console.log('取消浏览', json);
       let that = this;
       let openId = this.$parent.globalData.userSpecialInfo.openid;
       const json = await api.delUserBrowser({
@@ -83,13 +84,9 @@
         }
       });
       if (json.data.code == 0) {
-        console.log("===========商品取消收藏成功=========")
-        //tip.toast("取消收藏成功");
         let retList = [];
         for (var i = 0; i < this.list.length; i++) {
-          if (this.list[i].goodsId == goodsId) {
-            continue;
-          } else {
+          if (this.list[i].goodsId != goodsId) {
             retList.push(this.list[i]);
           }
         }
@@ -111,7 +108,6 @@
       },
       refreshList(val) {
         if (val == undefined) return;
-        console.log("val.....", val);
         this.list = val;
         this.$apply();
       }

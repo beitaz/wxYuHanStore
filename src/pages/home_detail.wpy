@@ -67,7 +67,7 @@
       let that = this;
       const json = await api.getRecommends({
         query: {
-          p: currentPage || 1,
+          page: currentPage || 1,
           size: size || 10,
           cateCode: this.catCode,
           sort: this.sort,
