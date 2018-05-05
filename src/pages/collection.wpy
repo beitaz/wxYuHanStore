@@ -2,15 +2,15 @@
 <template>
   <view>
     <view class="collection">
-      <!--tab模块-->
+      <!-- tab模块 -->
       <view class="tab_box">
         <tab @currentTab.user="getCurrentTab" :currentTab.sync="currentTab" :tabList.sync="tabList"></tab>
       </view>
       <scroll-view scroll-y="true" class="swiper-item-box" style="height:{{winHeight - 31}}px" bindscrolltolower="onReachBottom">
         <!-- 我的足迹 -->
-        <collectionList :list.sync="browselist" wx:if="{{currentTab==0}}"></collectionList>
+        <collectionList :list.sync="browselist" wx:if="{{currentTab == 0}}"></collectionList>
         <!-- 我的收藏 -->
-        <collectionList :list.sync="favorlist" wx:if="{{currentTab==1}}"></collectionList>
+        <collectionList :list.sync="favorlist" wx:if="{{currentTab == 1}}"></collectionList>
       </scroll-view>
     </view>
     <!--加载更多时动画-->
@@ -43,20 +43,15 @@
       tabList: ["我的足迹", "我的收藏"],
       currentTab: 0,
       winHeight: 0,
-      //当前页面
-      currentPage: 1,
-      //总页数
-      page_total: 0,
-      //是否显示 底部loading
-      showLoading: true,
-      //防止重复加载
-      preventRepeatReuqest: false
+      currentPage: 1,  // 当前页面
+      page_total: 0,  // 总页数
+      showLoading: true,  // 是否显示底部loading
+      preventRepeatReuqest: false  // 防止重复加载
     }
     async getUserBrowse(currentPage, size) {
       // console.log("足迹");
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      let openId = userSpecialInfo.openid;
+      let openId = this.$parent.globalData.userSpecialInfo.openid;
       console.log("==========调用aip=======");
       const json = await api.browseInfo({
         query: {
@@ -77,23 +72,22 @@
       }
       that.showLoading = false;
     }
+    // 我的收藏
     async getUserFavorite(currentPage, size) {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      let openId = userSpecialInfo.openid;
+      let openId = this.$parent.globalData.userSpecialInfo.openid;
       const json = await api.favoriteInfo({
         query: {
-          openId: openId,
+          openid: openId,
           page: currentPage || 1,
           size: size || 10
         }
       });
+      console.log('我的收藏', json);
       if (json.data.code == 0) {
         that.favorlist = [...that.favorlist, ...json.data.list];
         that.page_total = json.data.page_total;
-        console.log("==========反正數據=======");
-        console.log(that.favorlist);
-        // console.log((json.data);
+        console.log('收藏列表', that.favorlist);
         that.$invoke('collectionList', 'refreshList', that.favorlist);
         that.$apply();
       } else {
@@ -101,38 +95,31 @@
       }
       that.showLoading = false;
     }
-    onLoad(opts) {
-      let that = this;
-      let title = "";
-      that.browselist = {};
-      that.favorlist = {};
-      that.list = bb.result.products;
-      //opts.type 0：我的足迹 ，1：我的收藏
-      that.currentTab = opts.type;
-      if (opts.type == 0) {
-        that.getUserBrowse();
-      } else {
-        console.log("调用收藏")
-        that.getUserFavorite();
-      }
-      //动态设置标题
-      that.setTitle(opts.type);
-      //设置滚动高度
-      let systemInfo = wepy.getStorageSync(SYSTEM_INFO);
-      that.winHeight = systemInfo.windowHeight;
-      that.$apply();
+    onLoad(options) {
+      let this = this;
+      // this.browselist = {};
+      // this.favorlist = {};
+      // this.list = bb.result.products;
+      // options.type 0：我的足迹 ，1：我的收藏
+      this.currentTab = options.type;
+      console.log('初始化参数', options);
+      options.type == 0 ? this.getUserBrowse() : this.getUserFavorite();
+      wepy.setNavigationBarTitle({title: this.tabList[options.type]});  // 设置标题
+      this.winHeight = this.$parent.globalData.systemInfo.windowHeight;  // 设置高度
+      this.$apply();
     }
     computed = {}
     methods = {
-      getCurrentTab(cur, evt) {
+      getCurrentTab(current, evt) {
         this.currentPage = 1;
         this.page_total = 0;
         let that = this;
         that.currentTab = cur;
-        that.setTitle(cur)
+        wepy.setNavigationBarTitle({title: this.tabList[options.type]});  // 设置标题
+        // that.setTitle(cur)
         console.log("cur");
-        console.log(cur);
-        if (cur == 1) {
+        console.log('current tab:', current);
+        if (current == 1) {
           that.getUserFavorite();
           that.favorlist = {};
         } else {

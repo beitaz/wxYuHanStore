@@ -100,7 +100,7 @@
       });
       let user = json.data;
       if (user) {
-        this.showBind = !(user.mobile.length > 0)
+        this.showBind = !user.mobile;
         that.$apply();
       } else {
         tip.error('未找到用户信息', 1000)

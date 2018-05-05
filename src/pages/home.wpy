@@ -18,7 +18,7 @@
         <swiper-item>
           <!-- 手指点击事件 @tap 等同 @tap.default (事件修饰符 .default 是默认值,可以省略不写) -->
           <!-- 事件传参语法糖 @tap="click({{index}}) 等同 bindtap="click" data-index={{index}} -->
-          <image src="{{item.picUrl}}" class="slide-image" @tap="goToAdvert({{item.advertUrl}})" />
+          <image src="{{item.pic_url}}" class="slide-image" @tap="goToAdvert({{item.advert_url}})" />
         </swiper-item>
       </block>
     </swiper>
@@ -64,10 +64,10 @@
   import Bombscreen from '../components/bomb_screen'
   import BottomLoadMore from '../components/common/bottomLoadMore'
   import Placeholder from '../components/common/placeholder'
-  import { ISDEV, SHOW_DISCOVER, SHOW_ALERT, ALERT_TYPE } from '../utils/constant'
+  import { APP_NAME, ISDEV, SHOW_DISCOVER, SHOW_ALERT, ALERT_TYPE } from '../utils/constant'
   export default class Home extends wepy.page {
     config = {
-      navigationBarTitleText: '素洁服装厂',
+      navigationBarTitleText: '微信小程序',
     }
     components = {
       discover: Discover,
@@ -98,29 +98,32 @@
       showDiscover: SHOW_DISCOVER // 控制是否显示
     }
     // 获取首页广告
-    async getHomeAdList() {
-      let json = await api.getAdList();
+    async getHomeAdverts() {
+      let json = await api.getAdverts();
       console.log('获取首页广告 adverts: ', json)
-      if (json.data.length >= 0) {
-        this.adList = json.data;
+      let data = json.data;
+      if (data.code == 0) {
+        this.adList = data.list;
         this.$apply();
         // 原始数据发送到远程服务器
-        if (ISDEV) {
+        if (!ISDEV) {
           api.grabAdverts({
             method: 'POST',
-            query: json.data
+            query: data
           });
         }
       }
     }
     // 获取发现好商品
     async getHomeDiscovers() {
+      let that = this;
       let json = await api.getDiscovers();
       console.log('获取好商品 discovers: ', json);
       if (json.data.code == 0) {
-        this.discoverList = json.data.list;
-        this.$apply();
-        if (ISDEV) {
+        that.discoverList = json.data.list;
+        that.showDiscover = that.discoverList.length > 0;
+        that.$apply();
+        if (!ISDEV) {
           // 原始数据发送到远程服务器
           api.grabDiscovers({
             method: 'POST',
@@ -128,10 +131,9 @@
           });
         }
       }
-      this.showLoading = false;
     }
     // 获取推荐商品
-    async getHomeRecommend(currentPage, size) {
+    async getHomeRecommends(currentPage, size) {
       let that = this;
       const json = await api.getRecommends({
         query: {
@@ -139,9 +141,9 @@
           size: size || 10
         }
       });
-      console.log('获取推荐商品 recommends: ', json);
+      console.log('获取推荐商品 recommends: ', json.data);
       if (json.data.code == 0) {
-        if (ISDEV) {
+        if (!ISDEV) {
           // 原始数据发送到远程服务器
           api.grabRecommends({
             method: 'POST',
@@ -161,10 +163,11 @@
     }
     // 页面加载时初始化数据
     onLoad() {
+      wepy.setNavigationBarTitle({ title: APP_NAME });
       this.discoverList = [];
-      this.getHomeAdList();
+      this.getHomeAdverts();
       this.getHomeDiscovers();
-      this.getHomeRecommend();
+      this.getHomeRecommends();
     }
     computed = {}
     methods = {
@@ -221,7 +224,7 @@
         }
         that.preventRepeatReuqest = true;
         that.currentPage++;
-        that.getHomeRecommend(that.currentPage);
+        that.getHomeRecommends(that.currentPage);
         that.preventRepeatReuqest = false;
       } else {
         that.showLoading = false;

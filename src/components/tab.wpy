@@ -42,9 +42,7 @@
         this.tabList = dotList;
       }
     }
-    onLoad() {
-      let that = this;
-    }
+    onLoad() {}
     watch = {
       currentTab(newValue, oldValue) {
         console.log(`currentTab value: ${oldValue} -> ${newValue}`)

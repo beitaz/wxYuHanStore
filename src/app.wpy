@@ -108,7 +108,7 @@
               nick_name: wxUserInfo.userInfo.nickName
             }
           }).then(resp => {
-            console.log("wxJsCode2Session 结果 resp = %O", resp);
+            // console.log("wxJsCode2Session 结果 resp = %O", resp);
             let data = resp.data;
             this.globalData.userSpecialInfo = { openid: data ? data.openid : OPENID };  // 存储用户特殊信息 
           });

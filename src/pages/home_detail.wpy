@@ -65,16 +65,16 @@
     }
     async getGoodList(currentPage, size) {
       let that = this;
-      //const json = await api.getGoodsList({
       const json = await api.getRecommends({
         query: {
-          page: currentPage || 1,
+          p: currentPage || 1,
           size: size || 10,
           cateCode: this.catCode,
           sort: this.sort,
           skuval: this.skuval
         }
       });
+      console.log('发现好商品详情: ', json);
       if (json.data.code == 0) {
         that.cate = json.data.category;
         wx.setNavigationBarTitle({
@@ -93,20 +93,16 @@
       that.$apply();
     }
     onLoad(option) {
-      this.cate = {};
-      this.list = [];
-      this.skuval = "";
+      // this.cate = {};
+      // this.list = [];
+      // this.skuval = "";
       this.catCode = option.code;
-      this.is_empty = false;
-      //当前页面
-      this.currentPage = 1;
-      //总页数
-      this.page_total = 0;
-      //是否显示 底部loading
-      this.showLoading = true;
-      //防止重复加载
-      this.preventRepeatReuqest = false;
-      this.sort = 1;
+      // this.is_empty = false;
+      // this.currentPage = 1;  // 当前页面
+      // this.page_total = 0;  // 总页数
+      // this.showLoading = true;  // 是否显示 底部loading
+      // this.preventRepeatReuqest = false;  // 防止重复加载
+      // this.sort = 1;
       console.log("id===" + this.catCode);
       //this.list = bb.result.products;
       //this.$apply();

@@ -39,9 +39,7 @@
       discount: true,
       showTitle: true
     }
-    onLoad() {
-      console.log('hello')
-    }
+    onLoad() {}
     getList() {}
     computed = {
       show() {

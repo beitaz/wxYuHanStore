@@ -21,9 +21,15 @@ const grabGoodsDetail = (params) => wxRequest(params, localhost + '/api/detail')
 
 const apiMall = ISDEV ? localhost : sujiefs
 const wxJsCode2Session = (params) => wxRequest(params, apiMall + "/api/wechat/jscode2session");  // 微信的jscode换取sessionKey
-const getAdList = (params) => wxRequest(params, apiMall + '/api/adverts/list');
-const getDiscovers = (params) => wxRequest(params, apiMall + '/api/mall/discoverList');  // 获取 "发现好商品" 数据
-const getRecommends = (params) => wxRequest(params, apiMall + '/api/home/hostGoodsList');  // 获取 "商品推荐" 数据
+const getAdverts = (params) => wxRequest(params, apiMall + '/api/adverts/list');
+const getDiscovers = (params) => wxRequest(params, apiMall + '/api/mall/discoverList');  // 发现好商品
+const getRecommends = (params) => wxRequest(params, apiMall + '/api/home/hostGoodsList');  // 商品推荐
+const goodsDetail = (params) => wxRequest(params, apiMall + '/api/mall/goods');  // 商品详情
+const goodsIsFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/goodsIsFavorite');  // 是否收藏
+const goodsFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/add');  // 添加收藏
+const goodsUnFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/delete'); // 取消收藏
+const addBrowser = (params) => wxRequest(params, apiMall + '/api/userBrowse/add');  // 添加用户足迹
+const favoriteInfo = (params) => wxRequest(params, apiMall + '/api/userCenter/favorites');  // 所有收藏
 
 // 获取发现好商品接口 (已废弃)
 // const getDiscoverList = (params) => wxRequest(params, apiMall + '/goods/list?cateidOne=1&cateidTwo=0&price=0&sales=2');
@@ -31,12 +37,14 @@ const getRecommends = (params) => wxRequest(params, apiMall + '/api/home/hostGoo
 //商品接口---begin
 //首页发现商品接口
 // const getRecommends = (params) => wxRequest(params, apiMall + '/api/home/hostGoodsList');
+// const hostGoodsList = (params) => wxRequest(params, apiMall + '/api/home/hostGoodsList');
+// const getHomeDisvocerList = (params) => wxRequest(params, apiMall + '/api/mall/discoverList');
 
 //查询商品列表
 const getGoodsList = (params) => wxRequest(params, apiMall + '/api/mall/searchGoodsList');
 
 //查询商品详情信息
-const goodsDetail = (params) => wxRequest(params, apiMall + '/api/mall/goods');
+// const goodsDetail = (params) => wxRequest(params, apiMall + '/api/mall/goods');
 //商品加入购物车
 const addCart = (params) => wxRequest(params, apiMall + '/api/mall/goodsCart/add');
 //用户的购物车商品列表
@@ -58,14 +66,6 @@ const saveByCart = (params) => wxRequest(params, apiMall + '/api/mall/goodsOrder
 //支付统一下单
 const toPay = (params) => wxRequest(params, apiMall + '/wepay/toPay');
 
-//商品收藏
-const goodsFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/add');
-
-//商品收藏删除
-const goodsUnFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/delete');
-
-//商品是否已收藏
-const goodsIsFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/goodsIsFavorite');
 
 //商品接口---end
 
@@ -81,13 +81,8 @@ const pointInfo = (params) => wxRequest(params, apiMall + '/api/userPoint/pointI
 
 //用户足迹信息
 const browseInfo = (params) => wxRequest(params, apiMall + '/api/userBrowse/browseInfo');
-//添加用户足迹
-const addBrowser = (params) => wxRequest(params, apiMall + '/api/userBrowse/add');
-//添加用户足迹
+//删除用户足迹
 const delUserBrowser = (params) => wxRequest(params, apiMall + '/api/userBrowse/delete');
-
-//用户收藏的商品
-const favoriteInfo = (params) => wxRequest(params, apiMall + '/api/goodsFavorite/favoriteInfo');
 
 //用户消息
 const messageInfo = (params) => wxRequest(params, apiMall + '/api/systemMessage/messageInfo');
@@ -153,7 +148,7 @@ const childGoodsCatetoryList = (params) => wxRequest(params, apiMall + '/api/mal
 //商品分类--end
 
 //查询广告列表
-// const getAdList = (params) => wxRequest(params, apiMall + '/api/adverts/list');
+// const getAdverts = (params) => wxRequest(params, apiMall + '/api/adverts/list');
 
 module.exports = {
   getRecommends,
@@ -186,7 +181,7 @@ module.exports = {
   goodsUnFavorite,
   goodsIsFavorite,
   getMyOrderSize,getPayOrderDetail,
-  getAdList,
+  getAdverts,
   getSignDate,
   grabAdverts,
   grabDiscovers,

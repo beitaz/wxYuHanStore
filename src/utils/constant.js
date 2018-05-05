@@ -28,6 +28,11 @@ export const ADDRESS_ID = "addressId";
  */
 export const SEL_CLASS_CODE = "selClassCode";
 
+/**
+ * 项目名称
+ * @type {String}
+ */
+export const APP_NAME = '素洁商城'
 
 /**
  * 是否将原始数据发送到本地 ( true:需要, false:不需要 )

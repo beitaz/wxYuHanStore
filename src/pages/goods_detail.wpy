@@ -25,8 +25,8 @@
         -->
         <view class="whole">
           <text>拼团价:</text>
-          <text class="whole-price">{{detail.wholePrice}}</text>
-          <text class="whole-num">({{detail.wholeNum}} 件成团)</text>
+          <text class="whole-price">{{detail.whole_price}}</text>
+          <text class="whole-num">({{detail.whole_num}} 件成团)</text>
         </view>
         <view class="share-box">
           <i class="iconfont icon-share"></i>
@@ -116,7 +116,7 @@
           <!-- <button open-type="contact" class="service" plain="true">客服</button> -->
         </view>
         <view class="item" @tap="takeFavorite">
-          <i class="iconfont {{isFavorite ? 'icon-star-outline' : 'icon-star'}}"></i>
+          <i class="iconfont {{isFavorite ? 'icon-star' : 'icon-star-outline'}}"></i>
         </view>
         <view class="sy-bottom {{canOrder ? 'btn_cart' : 'cart_color'}}" @tap="takeCart">加入购物车</view>
         <view class="sy-bottom {{canOrder ? 'btn_order' : 'order_color'}}" @tap="takeOrder">{{purchaseText}}</view>
@@ -179,11 +179,9 @@
       goodsId: 0,
       detail: {},
       good_bigimg: [],
-      //订单活动开始时间（格式yy-mm-dd 或者 yy/mm/dd ）
-      //startTime: "2017-07-15 16:00:00",
+      //startTime: "2017-07-15 16:00:00",  // 订单活动开始时间（格式yy-mm-dd 或者 yy/mm/dd ）
       startTime: "",
-      //订单活动结束时间（格式yy-mm-dd 或者 yy/mm/dd ）
-      //endTime: "2017-07-21 16:04:00"
+      //endTime: "2017-07-21 16:04:00"  // 订单活动结束时间（格式yy-mm-dd 或者 yy/mm/dd ）
       endTime: "",
       hidden: true,
       animationData: "",  // 动画效果
@@ -219,36 +217,18 @@
       commentList: CommentList
     }
     onLoad(option) {
-      let that = this;
-      this.orderNum = 1;
-      this.purchasetype = 1;
-      this.isFavorite = false;
-      this.isValidDate = true;
-      this.canOrder = true;
-      this.hidden = true;
-      this.winHeight = "100%";
-      that.detail = {};
-      that.$apply();
-      that.goodsId = option.id; // 接收上一个页面传过来的参数
-      if (option.purchasetype != undefined) {
-        this.purchasetype = option.purchasetype;
-      }
-      if (this.purchasetype == 2) {
-        this.purchaseText = "申请补货";
-      } else {
-        this.purchaseText = "立即购买";
-      }
-      if (option.special != undefined) {
-        this.special = option.special;
-      }
-      that.getGoodsDetail();
-      that.addUserBrowser();
+      this.goodsId = option.id; // 接收上一个页面传过来的参数
+      this.purchasetype = option.purchasetype || this.purchasetype;
+      this.special = option.special || this.special;
+      this.purchaseText = (this.purchasetype == 2 ? '申请补货' : '立即购买');
+      this.getGoodsDetail();  // 获取商品详情
+      this.addUserBrowser();  // 添加用户足迹
       console.log(this.special ? "special = 0 (正常入库)" : "special = 1 (特价和换货)");
     }
     onShow() {
       this.goodsIsFavorite();
-      //创建动画
-      var animation = wx.createAnimation({
+      // 创建动画
+      let animation = wx.createAnimation({
         transformOrigin: "50% 50%",
         duration: 200,
         timingFunction: "linear",
@@ -258,9 +238,9 @@
     }
     wxParseImgLoad(e) {}
     wxParseImgTap(e) {
-      var that = this
-      var nowImgUrl = e.target.dataset.src
-      var tagFrom = e.target.dataset.from
+      let that = this
+      let nowImgUrl = e.target.dataset.src
+      let tagFrom = e.target.dataset.from
       if (typeof(tagFrom) != 'undefined' && tagFrom.length > 0) {
         wx.previewImage({
           current: nowImgUrl, // 当前显示图片的http链接
@@ -269,13 +249,6 @@
         })
       }
     }
-    /*onReachBottom() {
-      let that = this;
-      if (that.good_bigimg.length == 0) {
-        that.good_bigimg = that.detail.good_bigimg;
-        that.$apply();
-      }
-    }*/
     async getGoodsDetail() {
       let that = this;
       const json = await api.goodsDetail({
@@ -283,21 +256,14 @@
           id: that.goodsId
         }
       });
-      // let time = {};
+      console.log('获取商品详情 ', json);
       if (json.data.code == 0) {
-        let data = json.data.data;
-        that.detail = data;
-        if (ISDEV) {
-          // 原始数据发送到远程服务器
-          api.grabGoodsDetail({
-            method: 'POST',
-            query: that.detail
-          });
-        }
-        console.log('getGoodsDetail %O', json);
-        WxParse.wxParse('detailInfo', 'html', that.detail.detailInfo, this);
-        // time.endTime = that.detail.validEndTime;
-        // time.startTime = that.detail.startTime;
+        that.detail = json.data.data;
+        that.detail.photoList = json.data.photos;
+        console.log('商品详情', that.detail);
+        WxParse.wxParse('detailInfo', 'html', that.detail.detail_info, this);
+        // time.endTime = that.detail.valid_end_time;
+        // time.startTime = that.detail.start_time;
         /*time.startTime ="2017-07-15 16:00:00";
         time.endTime = "2017-07-21 16:04:00";*/
         if (json.data.validDate == 0) {
@@ -309,29 +275,25 @@
           }
         }
       } else {
-        if (json.data.msg) {
-          tip.error(json.data.msg)
-        } else {
-          tip.error('查看商品失败')
-        }
+        tip.error('查看商品失败');
       }
       that.$apply();
-      //this.$invoke('timer', 'initTimer', time);
+      // this.$invoke('timer', 'initTimer', time);
     }
+    // 添加用户足迹(浏览记录)
     async addUserBrowser() {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      let openId = userSpecialInfo.openid;
+      let openId = this.$parent.globalData.userSpecialInfo.openid;
       const json = await api.addBrowser({
         query: {
-          goodsId: that.goodsId,
-          openId: openId
+          id: that.goodsId,
+          openid: openId
         }
       });
     }
     computed = {}
     events = {}
-    //加入购物车
+    // 加入购物车
     async doTakeCart() {
       let that = this;
       let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
@@ -364,7 +326,7 @@
         }
       }
     }
-    //立即购买
+    // 立即购买
     async doTakeOrder() {
       let that = this;
       let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
@@ -406,74 +368,57 @@
       })
       setTimeout(() => {
         this.hidden = false;
-        let systemInfo = wepy.getStorageSync(SYSTEM_INFO);
-        this.winHeight = systemInfo.windowHeight;
+        this.winHeight = this.$parent.globalData.systemInfo.windowHeight;
         this.$apply();
       }, 100)
     }
-    //查看商品收藏状态
+    // 查看商品收藏状态
     async goodsIsFavorite() {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      let openId = userSpecialInfo.openid;
+      let openId = this.$parent.globalData.userSpecialInfo.openid;
       const json = await api.goodsIsFavorite({
         query: {
-          openId: openId,
-          goodsId: that.goodsId
+          openid: openId,
+          id: that.goodsId
         }
       });
-      if (json.data.code == 0) {
-        if (json.data.isFavorite == 1) {
-          this.isFavorite = true;
-          console.log('goodsIsFavorite: %O', this.isFavorite);
-        } else {
-          this.isFavorite = false;
-        }
-      } else {
-        if (json.data.msg) {
-          tip.error(json.data.msg)
-        } else {
-          tip.error('查看商品收藏失败', 1000)
-        }
-      }
+      this.isFavorite = json.data.favorited;
       that.$apply();
     }
-    //商品收藏
+    // 收藏商品
     async goodsFavorite() {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      let openId = userSpecialInfo.openid;
+      let openId = this.$parent.globalData.userSpecialInfo.openid;
       const json = await api.goodsFavorite({
         query: {
-          openId: openId,
-          goodsId: that.goodsId
+          openid: openId,
+          id: that.goodsId
         }
       });
       if (json.data.code == 0) {
         this.isFavorite = true;
-        tip.toast("收藏成功");
+        tip.success("收藏成功");
       } else {
         console.log(json.data)
         tip.error('收藏失败!')
       }
       that.$apply();
     }
-    //商品取消收藏
+    // 取消收藏
     async goodsUnFavorite() {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      let openId = userSpecialInfo.openid;
+      let openId = this.$parent.globalData.userSpecialInfo.openid;
       const json = await api.goodsUnFavorite({
         query: {
-          openId: openId,
-          goodsId: that.goodsId
+          openid: openId,
+          id: that.goodsId
         }
       });
       if (json.data.code == 0) {
         tip.toast("取消收藏成功");
         this.isFavorite = false;
       } else {
-        console.log(json.data)
+        console.log('取消收藏失败', json.data)
         tip.error('取消收藏失败!')
       }
       that.$apply();
@@ -484,11 +429,6 @@
         wepy.switchTab({
           url: '/pages/home'
         })
-        // wx.switchTab({
-        //   url: '/pages/home'
-        // })
-        // console.log(wepy)
-        // console.log(wx)
       },
       moreComment() {
         wepy.navigateTo({
@@ -527,13 +467,7 @@
         //this.doTakeCart();
       },
       takeFavorite() {
-        if (this.isFavorite == true) {
-          this.goodsUnFavorite();
-          console.log('takeFavorite 取消收藏: %O', this.isFavorite);
-        } else {
-          this.goodsFavorite();
-          console.log("takeFavorite 收藏")
-        }
+        this.isFavorite ? this.goodsUnFavorite() : this.goodsFavorite();
       },
       closeModel() {
         this.winHeight = "100%";
@@ -546,7 +480,7 @@
           this.$apply();
         }, 100)
       },
-      confirmTake() { //确定购物车或者直接购买
+      confirmTake() { // 确定购物车或者直接购买
         if (this.orderType == 1) {
           this.doTakeCart();
         } else if (this.orderType == 2) {
@@ -562,20 +496,21 @@
         }
       },
       selAttr(e) {
-        var id = e.currentTarget.dataset.id;
-        var nameid = e.currentTarget.dataset.nameid;
-        var index = e.currentTarget.dataset.index;
-        for (var i = 0; i < this.detail.goodsSkuNameList.length; i++) {
-          var skuValList = this.detail.goodsSkuNameList[i].skuValList;
-          for (var j = 0; j < skuValList.length; j++) {
-            var skuVal = skuValList[j];
+        console.log('设置商品属性', this.detail);
+        let id = e.currentTarget.dataset.id;
+        let nameid = e.currentTarget.dataset.nameid;
+        let index = e.currentTarget.dataset.index;
+        for (let i = 0; i < this.detail.goodsSkuNameList.length; i++) {
+          let skuValList = this.detail.goodsSkuNameList[i].skuValList;
+          for (let j = 0; j < skuValList.length; j++) {
+            let skuVal = skuValList[j];
             if (skuVal.skuNameId == nameid) {
               skuVal.current = false;
               if (skuVal.skuValId == id) {
                 skuVal.current = true;
                 this.detail.goodsSkuValIds[index] = id;
-                for (var k = 0; k < this.detail.goodsSkuList.length; k++) {
-                  var skuValIds = JSON.parse(this.detail.goodsSkuList[k].skuValIds).toArray;
+                for (let k = 0; k < this.detail.goodsSkuList.length; k++) {
+                  let skuValIds = JSON.parse(this.detail.goodsSkuList[k].skuValIds).toArray;
                   console.log("selAttr goodskuids: %O", this.detail.goodsSkuList[k].skuValIds);
                   console.log("this goodskuids %O", this.detail.goodsSkuValIds);
                   if ("[" + this.detail.goodsSkuValIds.toString() + "]" === this.detail.goodsSkuList[k].skuValIds) {
