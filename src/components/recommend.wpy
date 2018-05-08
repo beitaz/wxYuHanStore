@@ -5,7 +5,7 @@
     </view>
     <view class="recommend-content">
       <navigator class="recommend" open-type="navigate" wx:for="{{list}}" wx:key="item" url="/pages/goods_detail?id={{item.id}}">
-        <view class="promotion" wx:if="{{show}}">
+        <view class="promotion" wx:if="{{item.share_tips}}">
           <i class="iconfont icon-sey-discount"></i>
         </view>
         <view class="img-wapper">
@@ -19,8 +19,8 @@
           <view class="name" wx:if="{{showTitle}}">{{item.name}}</view>
           <view class="desc">
             <view class="price">￥{{item.price}}</view>
-            <view class="cost-price">￥{{item.marketPrice}}</view>
-            <view class="sale-num">销量{{item.saleCount}}件</view>
+            <view class="cost-price">￥{{item.market_price}}</view>
+            <view class="sale-num">销量{{item.sale_count}}件</view>
           </view>
         </view>
       </navigator>
