@@ -41,6 +41,12 @@ export const APP_NAME = '素洁商城'
 export const ISDEV = true;
 
 /**
+ * 启动时是否显示 "导航条" ( true:显示, false:不显示 )
+ * @type {Boolean}
+ */
+export const SHOW_NAV = true;
+
+/**
  * 启动时是否显示 "发现好商品" ( true:显示, false:不显示 )
  * @type {Boolean}
  */
