@@ -96,25 +96,25 @@
     async onLaunch() {
       // let app = getApp();    // App() 内使用 this 就可以拿到 app 实例
       let specical = this.globalData.userSpecialInfo;    // 用户特殊信息
+      this.globalData.systemInfo = wepy.getSystemInfoSync();    // 存储系统信息
       if (specical === undefined) {     // 信息无效(无过期时间)
         let res = await wepy.login();
-        if (res.code) {
-          let wxUserInfo = await wepy.getUserInfo();
-          this.globalData.userInfo = wxUserInfo.userInfo;   // 存储用户信息
-          this.globalData.systemInfo = wepy.getSystemInfoSync();    // 存储系统信息
-          wxJsCode2Session({
-            query: {
-              js_code: res.code,
-              nick_name: wxUserInfo.userInfo.nickName
-            }
-          }).then(resp => {
-            // console.log("wxJsCode2Session 结果 resp = %O", resp);
-            let data = resp.data;
-            this.globalData.userSpecialInfo = { openid: data ? data.openid : OPENID };  // 存储用户特殊信息 
-          });
-        } else {
-          tip.error('获取用户登录态失败！' + res.errMsg);
-        }
+        // if (res.code) {
+        //   let wxUserInfo = await wepy.getUserInfo();
+        //   this.globalData.userInfo = wxUserInfo.userInfo;   // 存储用户信息
+        //   wxJsCode2Session({
+        //     query: {
+        //       js_code: res.code,
+        //       nick_name: wxUserInfo.userInfo.nickName
+        //     }
+        //   }).then(resp => {
+        //     // console.log("wxJsCode2Session 结果 resp = %O", resp);
+        //     let data = resp.data;
+        //     this.globalData.userSpecialInfo = { openid: data ? data.openid : OPENID };  // 存储用户特殊信息 
+        //   });
+        // } else {
+        //   tip.error('获取用户登录态失败！' + res.errMsg);
+        // }
       }
     }
   }

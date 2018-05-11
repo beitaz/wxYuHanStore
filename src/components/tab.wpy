@@ -35,11 +35,6 @@
       }
     }
     onLoad() {}
-    // watch = {
-    //   currentTab(newValue, oldValue) {
-    //     console.log(`currentTab value: ${oldValue} -> ${newValue}`)
-    //   }
-    // }
   }
 </script>
 

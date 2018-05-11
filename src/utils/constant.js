@@ -44,13 +44,13 @@ export const ISDEV = true;
  * 启动时是否显示 "导航条" ( true:显示, false:不显示 )
  * @type {Boolean}
  */
-export const SHOW_NAV = true;
+export const SHOW_NAV = false;
 
 /**
  * 启动时是否显示 "发现好商品" ( true:显示, false:不显示 )
  * @type {Boolean}
  */
-export const SHOW_DISCOVER = true;
+export const SHOW_DISCOVER = false;
 
 /**
  * 启动时是否显示 "弹幕" ( true:显示, false:不显示 )

@@ -33,9 +33,9 @@
           <!-- <text>分享</text> -->
         </view>
       </view>
-      <view class="tips" wx:if="{{detail.shareTips}}">{{detail.shareTips}}</view>
-      <view class="tags" wx:if="{{detail.shareTips}}">
-        <i class="iconfont icon-money"></i>
+      <view class="tips" wx:if="{{detail.share_tips}}">{{detail.share_tips}}</view>
+      <view class="tags" wx:if="{{detail.share_tips}}">
+        <i class="iconfont icon-seven"></i>
         <text class="label">七天退换</text>
       </view>
     </view>
@@ -119,10 +119,12 @@
           <i class="iconfont {{isFavorite ? 'icon-star' : 'icon-star-outline'}}"></i>
         </view>
         <view class="sy-bottom {{canOrder ? 'btn_cart' : 'cart_color'}}" @tap="takeCart">加入购物车</view>
-        <view class="sy-bottom {{canOrder ? 'btn_order' : 'order_color'}}" @tap="takeOrder">{{purchaseText}}</view>
+        <view class="sy-bottom {{canOrder ? 'btn_order' : 'order_color'}}" @tap="takeOrder">{{this.purchasetype == 2 ? '申请补货' : '立即购买'}}</view>
       </view>
     </view>
     <view class="over_model {{hidden ? 'hidden' : ''}}"></view>
+
+    <!-- 点击 "加入购物车/立刻购买" 后弹出的确认选择框 -->
     <view class="panle_model {{hidden ? 'hidden' : ''}}" animation="{{animationData}}">
       <view class="model_content">
         <view class="head_box">
@@ -143,15 +145,15 @@
           </view>
           <view class="num_box">
             <view class="title">数量</view>
-            <view class="stock">库存:{{detail.stockNum}}件</view>
+            <view class="stock">库存:{{detail.stock_num}}件</view>
             <view class="buy-num">
-              <view class="jian-btn {{item.number==1? 'disabled' : ''}}" catchtap="jianBtnTap" data-index="{{index}}">-</view>
+              <view class="jian-btn {{item.number == 1 ? 'disabled' : ''}}" catchtap="jianBtnTap" data-index="{{index}}">-</view>
               <input type="number" bindinput="bindOrderNumInput" value="{{orderNum}}" />
-              <view class="jia-btn {{item.number==10? 'disabled' : ''}}" catchtap="jiaBtnTap" data-index="{{index}}">+</view>
+              <view class="jia-btn {{item.number == 10 ? 'disabled' : ''}}" catchtap="jiaBtnTap" data-index="{{index}}">+</view>
             </view>
           </view>
         </scroll-view>
-        <view class="colse_model" @tap="closeModel"><i class="iconfont icon-close"></i></view>
+        <view class="colse_model" @tap="closeModel"><i class="iconfont icon-roundclose"></i></view>
       </view>
       <view class="comfire_btn" @tap.stop="confirmTake">确定</view>
     </view>
@@ -168,7 +170,8 @@
   import tip from '../utils/tip'
   import api from '../api/api';
   import WxParse from "../plugins/wxParse/wxParse";
-  import CommentList from "../components/comment_list"
+  import CommentList from "../components/comment_list";
+  import _ from 'lodash';
   export default class goodsDetail extends wepy.page {
     config = {
       navigationBarTitleText: '商品详情'
@@ -191,7 +194,6 @@
       isValidDate: true, // 活动有效过期内
       canOrder: true, // 是否能下单
       purchasetype: 1, // 1-正常购买;2-补货
-      purchaseText: "立即购买",
       special: 0, // 0-正常入库;1-特价专区和换货专区
       commentList: [
       {
@@ -218,23 +220,18 @@
     }
     onLoad(option) {
       this.goodsId = option.id; // 接收上一个页面传过来的参数
-      this.purchasetype = option.purchasetype || this.purchasetype;
-      this.special = option.special || this.special;
-      this.purchaseText = (this.purchasetype == 2 ? '申请补货' : '立即购买');
       this.getGoodsDetail();  // 获取商品详情
       this.addUserBrowser();  // 添加用户足迹
-      console.log(this.special ? "special = 0 (正常入库)" : "special = 1 (特价和换货)");
     }
+    // 创建动画
     onShow() {
-      this.goodsIsFavorite();
-      // 创建动画
-      let animation = wx.createAnimation({
+      this.goodsIsFavorite();  // 用户是否收藏此商品,必须在页面加载后,已获取商品信息才能调用
+      this.animation = wx.createAnimation({
         transformOrigin: "50% 50%",
         duration: 200,
         timingFunction: "linear",
         delay: 0
       })
-      this.animation = animation;
     }
     wxParseImgLoad(e) {}
     wxParseImgTap(e) {
@@ -249,36 +246,29 @@
         })
       }
     }
+    // 获取商品详情
     async getGoodsDetail() {
       let that = this;
-      const json = await api.goodsDetail({
+      let json = await api.goodsDetail({
         query: {
           id: that.goodsId
         }
       });
-      console.log('获取商品详情 ', json);
+      console.log('获取商品详情', json);
       if (json.data.code == 0) {
-        that.detail = json.data.data;
-        that.detail.photoList = json.data.photos;
-        console.log('商品详情', that.detail);
-        WxParse.wxParse('detailInfo', 'html', that.detail.detail_info, this);
-        // time.endTime = that.detail.valid_end_time;
-        // time.startTime = that.detail.start_time;
-        /*time.startTime ="2017-07-15 16:00:00";
-        time.endTime = "2017-07-21 16:04:00";*/
-        if (json.data.validDate == 0) {
+        that.detail = json.data.data;  // 商品详情
+        that.special = that.detail.status;  // 0-正常入库; 1-特价专区和换货专区
+        that.purchasetype = that.detail.stock_num > 0 ? 1 : 2;  // 有库存时才能 1-正常购买; 否则为 2-补货
+        console.log('this.purchasetype = %d (1-正常购买; 2-补货), this.special = %d (0-正常入库; 1-特价专区和换货专区)', that.purchasetype, that.special);
+        WxParse.wxParse('detailInfo', 'html', that.detail.detail_info, this);  // 转换商品详情 detail_info
+        // 不能购买: 正常商品补货, 特价商品已过活动有效期
+        if ((that.special == 0 && that.purchasetype == 2) || (that.special == 1 && !that.detail.validDate)) {
+          console.log('无法购买: 正常商品补货中 或 特价商品已过活动有效期');
           that.isValidDate = false;
-          console.log('this.purchasetype = %d, this.special = %d', this.purchasetype, this.special)
-          // purchasetype (1-正常购买; 2-补货)   special (0-正常入库; 1-特价专区和换货专区)
-          if (this.purchasetype == 1 && this.special != 1) {
-            this.canOrder = false;
-          }
+          that.canOrder = false;
         }
-      } else {
-        tip.error('查看商品失败');
       }
       that.$apply();
-      // this.$invoke('timer', 'initTimer', time);
     }
     // 添加用户足迹(浏览记录)
     async addUserBrowser() {
@@ -296,14 +286,13 @@
     // 加入购物车
     async doTakeCart() {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      let openId = userSpecialInfo.openid;
+      let openId = this.$parent.globalData.userSpecialInfo.openid;
       const json = await api.addCart({
         query: {
-          openId: openId,
-          goodsId: that.goodsId,
-          goodsSkuId: this.detail.goodsSkuValIds,
-          purchaseType: this.purchasetype,
+          openid: openId,
+          id: that.goodsId,
+          goods_sku_id: this.detail.goodsSkuValIds,
+          purchase_type: this.purchasetype,
           num: this.orderNum
         }
       });
@@ -361,6 +350,7 @@
         }
       }
     }
+    // 显示加入购物车前的确认选择框
     async showConfirmData() {
       this.animation.height('783rpx').step();
       this.setData({
@@ -458,13 +448,13 @@
         this.orderType = 2;
         //this.doTakeOrder();
       },
+      // 加入购物车
       takeCart() {
-        if (!this.canOrder) {
+        if (!this.canOrder) { // 不能购买时,直接返回
           return;
         }
         this.showConfirmData();
         this.orderType = 1;
-        //this.doTakeCart();
       },
       takeFavorite() {
         this.isFavorite ? this.goodsUnFavorite() : this.goodsFavorite();
@@ -496,35 +486,54 @@
         }
       },
       selAttr(e) {
-        console.log('设置商品属性', this.detail);
-        let id = e.currentTarget.dataset.id;
-        let nameid = e.currentTarget.dataset.nameid;
-        let index = e.currentTarget.dataset.index;
-        for (let i = 0; i < this.detail.goodsSkuNameList.length; i++) {
-          let skuValList = this.detail.goodsSkuNameList[i].skuValList;
-          for (let j = 0; j < skuValList.length; j++) {
-            let skuVal = skuValList[j];
-            if (skuVal.skuNameId == nameid) {
-              skuVal.current = false;
-              if (skuVal.skuValId == id) {
-                skuVal.current = true;
-                this.detail.goodsSkuValIds[index] = id;
-                for (let k = 0; k < this.detail.goodsSkuList.length; k++) {
-                  let skuValIds = JSON.parse(this.detail.goodsSkuList[k].skuValIds).toArray;
-                  console.log("selAttr goodskuids: %O", this.detail.goodsSkuList[k].skuValIds);
-                  console.log("this goodskuids %O", this.detail.goodsSkuValIds);
-                  if ("[" + this.detail.goodsSkuValIds.toString() + "]" === this.detail.goodsSkuList[k].skuValIds) {
-                    console.log("goodskuids equals...");
-                    this.detail.stockNum = this.detail.goodsSkuList[k].stockNum;
-                    this.detail.price = this.detail.goodsSkuList[k].price;
-                    this.$apply();
-                    break;
-                  }
-                }
-              }
-            }
-          }
-        }
+        // console.log('切换 sku 事件', e);
+        // let skuValId = e.currentTarget.dataset.id; // 分类 ID
+        // let skuNameId = e.currentTarget.dataset.nameid; // 父分类 ID
+        // _.pull(this.detail.goodsSkuValIds, skuValId);
+        // console.log('goodsSkuValIds ', this.detail.goodsSkuValIds);
+        // console.log('goodsSkuNameList', this.detail.goodsSkuNameList);
+
+        // 利用 Lodash.find(Array, Function) 方法查找之前选中的 sku
+        let oldSku = _.find(this.detail.goodsSkuList, function(sku) {
+          return sku.current && sku.parent_id === skuNameId;
+        });
+        // let newSku = _.find(this.detail.goodsSkuList, function(sku) {
+        //   return sku.category_id = skuValId;
+        // })
+        console.log('查找结果 ', oldSku);
+        // 修改库存和价格
+        // this.detail.stockNum =
+
+        // let id = e.currentTarget.dataset.id;
+        // let nameid = e.currentTarget.dataset.nameid;
+        // let index = e.currentTarget.dataset.index;
+        // console.log('商品详情 %O, id = %o, nameid = %o, index = %o', this.detail, id, nameid, index);
+        // for (let i = 0; i < this.detail.goodsSkuNameList.length; i++) {
+        //   let skuValList = this.detail.goodsSkuNameList[i].skuValList;
+        //   for (let j = 0; j < skuValList.length; j++) {
+        //     let skuVal = skuValList[j];
+        //     if (skuVal.skuNameId == nameid) {
+        //       skuVal.current = false;
+        //       if (skuVal.skuValId == id) {
+        //         skuVal.current = true;
+        //         this.detail.goodsSkuValIds[index] = id;
+        //         for (let k = 0; k < this.detail.goodsSkuList.length; k++) {
+        //           console.log(this.detail.goodsSkuNameList[k].skuValIds);
+        //           let skuValIds = JSON.parse(this.detail.goodsSkuList[k].skuValIds).toArray;
+        //           console.log("selAttr goodskuids: %O", this.detail.goodsSkuList[k].skuValIds);
+        //           console.log("this goodskuids %O", this.detail.goodsSkuValIds);
+        //           if ("[" + this.detail.goodsSkuValIds.toString() + "]" === this.detail.goodsSkuList[k].skuValIds) {
+        //             console.log("goodskuids equals...");
+        //             this.detail.stockNum = this.detail.goodsSkuList[k].stockNum;
+        //             this.detail.price = this.detail.goodsSkuList[k].price;
+        //             this.$apply();
+        //             break;
+        //           }
+        //         }
+        //       }
+        //     }
+        //   }
+        // }
       },
       onShareAppMessage: function(res) {
         if (res.from === 'button') {
@@ -570,7 +579,7 @@
     }
     &.details {
       border-top: 1px solid #ededed;
-      padding: 30rpx 30rpx;
+      padding: 30rpx 30rpx 10rpx 30rpx;
       background: #fff;
       .info {
         overflow: hidden;
@@ -638,6 +647,7 @@
         .iconfont {
           font-size: 28rpx;
           color: #FA587E;
+          font-weight: 900;
         }
         .label {
           font-size: 24rpx;
@@ -940,9 +950,10 @@
   }
   .colse_model {
     position: absolute;
-    right: 10rpx;
-    top: 10rpx;
-    .icon-close {
+    right: 20rpx;
+    top: 20rpx;
+    padding: 10rpx;
+    .icon-roundclose {
       color: #e11500;
       font-size: 32rpx;
     }

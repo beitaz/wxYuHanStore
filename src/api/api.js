@@ -21,20 +21,26 @@ const grabGoodsDetail = (params) => wxRequest(params, localhost + '/api/detail')
 
 const apiMall = ISDEV ? localhost : sujiefs
 const wxJsCode2Session = (params) => wxRequest(params, apiMall + "/api/wechat/jscode2session");  // 微信的jscode换取sessionKey
-const getAdverts = (params) => wxRequest(params, apiMall + '/api/adverts/list');
+const getAdverts = (params) => wxRequest(params, apiMall + '/api/adverts/list');  // 首页广告
 const getDiscovers = (params) => wxRequest(params, apiMall + '/api/mall/discoverList');  // 发现好商品
 const getRecommends = (params) => wxRequest(params, apiMall + '/api/home/hostGoodsList');  // 商品推荐
-const goodsDetail = (params) => wxRequest(params, apiMall + '/api/mall/goods');  // 商品详情
+
 
 const registerUser = (params) => wxRequest(params, apiMall + '/api/users/register');  // 绑定手机
 const getUserInfo = (params) => wxRequest(params, apiMall + '/api/users/info');  // 用户是否绑定手机号
 const favoriteInfo = (params) => wxRequest(params, apiMall + '/api/users/favorites');  // 所有收藏
-const goodsIsFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/goodsIsFavorite');  // 是否收藏
 const goodsFavorite = (params) => wxRequest(params, apiMall + '/api/users/favorited');  // 添加收藏
 const goodsUnFavorite = (params) => wxRequest(params, apiMall + '/api/users/unfavorite'); // 取消收藏
 const browseInfo = (params) => wxRequest(params, apiMall + '/api/users/browses');  // 所有足迹
 const addBrowser = (params) => wxRequest(params, apiMall + '/api/users/browsed');  // 添加足迹
 const delUserBrowser = (params) => wxRequest(params, apiMall + '/api/users/unbrowse');  // 删除足迹
+const getMyOrderList = (params) => wxRequest(params, apiMall + '/api/users/orders');  // 我的订单
+const addCart = (params) => wxRequest(params, apiMall + '/api/users/shopcart');  // 加入购物车
+const goodsUserOrderList = (params) => wxRequest(params, apiMall + '/api/users/purchased');  // 我的订购
+
+
+const goodsIsFavorite = (params) => wxRequest(params, apiMall + '/api/goods/favorited');  // 是否收藏
+const goodsDetail = (params) => wxRequest(params, apiMall + '/api/goods/info');  // 商品详情
 
 // 获取发现好商品接口 (已废弃)
 // const getDiscoverList = (params) => wxRequest(params, apiMall + '/goods/list?cateidOne=1&cateidTwo=0&price=0&sales=2');
@@ -50,8 +56,7 @@ const getGoodsList = (params) => wxRequest(params, apiMall + '/api/mall/searchGo
 
 //查询商品详情信息
 // const goodsDetail = (params) => wxRequest(params, apiMall + '/api/mall/goods');
-//商品加入购物车
-const addCart = (params) => wxRequest(params, apiMall + '/api/mall/goodsCart/add');
+
 //用户的购物车商品列表
 const cartList = (params) => wxRequest(params, apiMall + '/api/mall/goodsCart/list');
 //购物车的商品选中状态
@@ -112,8 +117,7 @@ const searchKeywordList = (params) => wxRequest(params, apiMall + '/api/searchke
 //查询关键字清除
 const clearSearchKeyword = (params) => wxRequest(params, apiMall + '/api/searchkeyword/clear');
 
-//查询我的订单
-const getMyOrderList = (params) => wxRequest(params, apiMall + '/api/mall/goodsOrder/getMyOrderList');
+
 
 //查询我的订单数量
 const getMyOrderSize = (params) => wxRequest(params, apiMall + '/api/mall/goodsOrder/getMyOrderSize');
@@ -130,8 +134,7 @@ const editOrderInfo = (params) => wxRequest(params, apiMall + '/api/mall/goodsOr
 //根据订单号查询物流
 const orderExpressInfo = (params) => wxRequest(params, apiMall + '/api/orderExpress/orderExpressInfo');
 
-//查询用户的已订购产品
-const goodsUserOrderList = (params) => wxRequest(params, apiMall + '/api/mall/goodsOrder/goodsUserOrderList');
+
 
 //退货操作
 const refundApply = (params) => wxRequest(params, apiMall + '/api/mall/refund/saveRefundApply');

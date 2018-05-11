@@ -1,5 +1,8 @@
 <template>
-  <view class="container">
+  <view class=" ">
+    <view>
+      <!-- <button open-type="getUserInfo" class="auth">授权</button> -->
+    </view>
     <view class="search-wrapper">
       <view class="search_read_only">
         <navigator class="search_content" open-type="navigate" url="/pages/search">
@@ -23,7 +26,7 @@
       </block>
     </swiper>
 
-    <view class="nav_list">
+    <view class="nav_list" wx:if="{{showNav}}">
       <navigator open-type="navigate" url="/pages/sign_in" hover-class="navigator-hover">
         <image src="../images/icon_nav_01_new.png" class="nav_icon" />
         <view class="nav_text">签到有礼</view>
@@ -64,7 +67,7 @@
   import Bombscreen from '../components/bomb_screen'
   import BottomLoadMore from '../components/common/bottomLoadMore'
   import Placeholder from '../components/common/placeholder'
-  import { APP_NAME, ISDEV, SHOW_DISCOVER, SHOW_ALERT, ALERT_TYPE } from '../utils/constant'
+  import { APP_NAME, ISDEV, SHOW_NAV, SHOW_DISCOVER, SHOW_ALERT, ALERT_TYPE } from '../utils/constant'
   export default class Home extends wepy.page {
     config = {
       navigationBarTitleText: '微信小程序',
@@ -94,6 +97,7 @@
       preventRepeatReuqest: false,  // 防止重复加载
       adList: [],  // 广告列表
       tps: ALERT_TYPE,
+      showNav: SHOW_NAV,
       is_show_alert: SHOW_ALERT,
       showDiscover: SHOW_DISCOVER // 控制是否显示
     }
@@ -121,7 +125,7 @@
       console.log('获取好商品 discovers: ', json);
       if (json.data.code == 0) {
         that.discoverList = json.data.list;
-        that.showDiscover = that.discoverList.length > 0;
+        that.showDiscover = SHOW_DISCOVER && that.discoverList.length > 0;  // 显示变量为真,且存在数据是才显示"发现好商品"
         that.$apply();
         if (!ISDEV) {
           // 原始数据发送到远程服务器
@@ -163,6 +167,8 @@
     }
     // 页面加载时初始化数据
     onLoad() {
+      let wxUserInfo = await wepy.getUserInfo();
+      this.globalData.userInfo = wxUserInfo.userInfo;   // 存储用户信息
       wepy.setNavigationBarTitle({ title: APP_NAME });
       this.discoverList = [];
       this.getHomeAdverts();

@@ -5,7 +5,7 @@
     </view>
     <view class="recommend-content">
       <navigator class="recommend" open-type="navigate" wx:for="{{list}}" wx:key="item" url="/pages/goods_detail?id={{item.id}}">
-        <view class="promotion" wx:if="{{item.share_tips}}">
+        <view class="promotion" wx:if="{{item.status == 1}}">
           <i class="iconfont icon-sey-discount"></i>
         </view>
         <view class="img-wapper">

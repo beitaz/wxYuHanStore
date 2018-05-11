@@ -17,8 +17,8 @@ import HtmlToJson from './html2json.js';
 /**
  * 配置及公有属性
  **/
-var realWindowWidth = 0;
-var realWindowHeight = 0;
+let realWindowWidth = 0;
+let realWindowHeight = 0;
 wx.getSystemInfo({
   success: function (res) {
     realWindowWidth = res.windowWidth
@@ -29,13 +29,13 @@ wx.getSystemInfo({
  * 主函数入口区
  **/
 function wxParse(bindName='wxParseData', type='html', data='<div class="color:red;">数据不能为空</div>', target, imagePadding) {
-  var that = target;
-  var transData = {};//存放转化后的数据
+  let that = target;
+  let transData = {};//存放转化后的数据
   if (type == 'html') {
     transData = HtmlToJson.html2json(data, bindName);
   } else if (type == 'md' || type == 'markdown') {
-    var converter = new showdown.Converter();
-    var html = converter.makeHtml(data);
+    let converter = new showdown.Converter();
+    let html = converter.makeHtml(data);
     transData = HtmlToJson.html2json(html, bindName);
   }
   console.log(('wxParse 转换数据: %O', transData));
@@ -44,18 +44,18 @@ function wxParse(bindName='wxParseData', type='html', data='<div class="color:re
   if(typeof(imagePadding) != 'undefined'){
     transData.view.imagePadding = imagePadding
   }
-  var bindData = {};
+  let bindData = {};
   bindData[bindName] = transData;
-  that.setData(bindData)
-  that.bindData = bindData // 增加这一行代码
+  that.setData(bindData);
+  that.bindData = bindData; // 增加这一行代码
   that.wxParseImgLoad = wxParseImgLoad;
   that.wxParseImgTap = wxParseImgTap;
 }
 // 图片点击事件
 function wxParseImgTap(e) {
-  var that = this;
-  var nowImgUrl = e.target.dataset.src;
-  var tagFrom = e.target.dataset.from;
+  let that = this;
+  let nowImgUrl = e.target.dataset.src;
+  let tagFrom = e.target.dataset.from;
   if (typeof (tagFrom) != 'undefined' && tagFrom.length > 0) {
     wx.previewImage({
       current: nowImgUrl, // 当前显示图片的http链接
@@ -68,33 +68,33 @@ function wxParseImgTap(e) {
  * 图片视觉宽高计算函数区
  **/
 function wxParseImgLoad(e) {
-  var that = this;
-  var tagFrom = e.target.dataset.from;
-  var idx = e.target.dataset.idx;
+  let that = this;
+  let tagFrom = e.target.dataset.from;
+  let idx = e.target.dataset.idx;
   if (typeof (tagFrom) != 'undefined' && tagFrom.length > 0) {
     calMoreImageInfo(e, idx, that, tagFrom)
   }
 }
 // 假循环获取计算图片视觉最佳宽高
 function calMoreImageInfo(e, idx, that, bindName) {
-  var temData = that.data[bindName];
+  let temData = that.data[bindName];
   if (!temData || temData.images.length == 0) {
     return;
   }
-  var temImages = temData.images;
+  let temImages = temData.images;
   //因为无法获取view宽度 需要自定义padding进行计算，稍后处理
-  var recal = wxAutoImageCal(e.detail.width, e.detail.height,that,bindName);
+  let recal = wxAutoImageCal(e.detail.width, e.detail.height,that,bindName);
   // temImages[idx].width = recal.imageWidth;
   // temImages[idx].height = recal.imageheight;
   // temData.images = temImages;
-  // var bindData = {};
+  // let bindData = {};
   // bindData[bindName] = temData;
   // that.setData(bindData);
-  var index = temImages[idx].index
-  var key = `${bindName}`
-  for (var i of index.split('.')) key+=`.nodes[${i}]`
-  var keyW = key + '.width'
-  var keyH = key + '.height'
+  let index = temImages[idx].index
+  let key = `${bindName}`
+  for (let i of index.split('.')) key+=`.nodes[${i}]`
+  let keyW = key + '.width'
+  let keyH = key + '.height'
   that.setData({
     [keyW]: recal.imageWidth,
     [keyH]: recal.imageheight,
@@ -104,10 +104,10 @@ function calMoreImageInfo(e, idx, that, bindName) {
 // 计算视觉优先的图片宽高
 function wxAutoImageCal(originalWidth, originalHeight,that,bindName) {
   //获取图片的原始长宽
-  var windowWidth = 0, windowHeight = 0;
-  var autoWidth = 0, autoHeight = 0;
-  var results = {};
-  var padding = that.data[bindName].view.imagePadding;
+  let windowWidth = 0, windowHeight = 0;
+  let autoWidth = 0, autoHeight = 0;
+  let results = {};
+  let padding = that.data[bindName].view.imagePadding;
   windowWidth = realWindowWidth-2*padding;
   windowHeight = realWindowHeight;
   //判断按照那种方式进行缩放
@@ -127,11 +127,11 @@ function wxAutoImageCal(originalWidth, originalHeight,that,bindName) {
 }
 
 function wxParseTemArray(temArrayName,bindNameReg,total,that){
-  var array = [];
-  var temData = that.data;
-  var obj = null;
-  for(var i = 0; i < total; i++){
-    var simArr = temData[bindNameReg+i].nodes;
+  let array = [];
+  let temData = that.data;
+  let obj = null;
+  for(let i = 0; i < total; i++){
+    let simArr = temData[bindNameReg+i].nodes;
     array.push(simArr);
   }
 
