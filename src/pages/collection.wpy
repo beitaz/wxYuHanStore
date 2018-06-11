@@ -13,8 +13,10 @@
         <collectionList :list.sync="favorlist" wx:if="{{currentTab == 1}}"></collectionList>
       </scroll-view>
     </view>
-    <!--加载更多时动画-->
+    <!-- 加载更多时动画 -->
     <bottomLoadMore :show.sync="showLoading" message="正在加载"></bottomLoadMore>
+    <!-- 暂无数据显示 -->
+    <placeholder :show.sync="empty" message="暂无发现数据"></placeholder>
   </view>
 </template>
 
